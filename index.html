@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Bio Page | Creative Portfolio</title>
+
+    <!-- SEO Meta -->
+    <meta name="description" content="Creative Portfolio & Commission Bio Page">
+    <meta name="theme-color" content="#c084fc">
+
+    <!-- Tailwind CSS - CDN (สำหรับ development เท่านั้น) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Config Override -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'gradient': 'gradient 8s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        gradient: {
+                            '0%, 100%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                    },
+                    backgroundSize: {
+                        '300%': '300%',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&family=Inter:opsz,wght@14..32,100..900&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Vue 3 Production Build -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+            background: #0a0a0f;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            background-image: linear-gradient(rgba(192, 132, 252, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(192, 132, 252, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bento-item {
+            background: rgba(25, 25, 35, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(192, 132, 252, 0.2);
+            border-radius: 32px;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bento-item:hover {
+            transform: translateY(-8px);
+            border-color: rgba(192, 132, 252, 0.5);
+            box-shadow: 0 20px 40px rgba(192, 132, 252, 0.2);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #c084fc, #f472b6, #60a5fa);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradientShift 4s ease infinite;
+        }
+
+        @keyframes gradientShift {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a2a;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #c084fc, #f472b6);
+            border-radius: 4px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .gallery-item {
+            aspect-ratio: 1;
+            border-radius: 24px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(192, 132, 252, 0.3);
+            border-radius: 50%;
+            border-top-color: #c084fc;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .price-card {
+            background: linear-gradient(135deg, rgba(192, 132, 252, 0.1), rgba(244, 114, 182, 0.05));
+            border: 1px solid rgba(192, 132, 252, 0.2);
+            border-radius: 24px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .price-card:hover {
+            transform: translateY(-4px);
+            border-color: #c084fc;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 1rem;
+            position: relative;
+        }
+
+        .timeline-item:not(:last-child)::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 48px;
+            bottom: -20px;
+            width: 2px;
+            background: linear-gradient(to bottom, #c084fc, transparent);
+        }
+
+        .timeline-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            background: rgba(192, 132, 252, 0.2);
+            border: 2px solid #c084fc;
+            flex-shrink: 0;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #c084fc, #f472b6);
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(192, 132, 252, 0.4);
+        }
+
+        .btn-secondary-custom {
+            background: rgba(192, 132, 252, 0.15);
+            border: 1px solid rgba(192, 132, 252, 0.3);
+            padding: 10px 24px;
+            border-radius: 40px;
+            color: #c084fc;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-secondary-custom:hover {
+            background: rgba(192, 132, 252, 0.25);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .bento-item {
+                border-radius: 24px;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.75rem;
+            }
+        }
+
+        .fade-enter-active,
+        .fade-leave-active {
+            transition: opacity 0.3s ease;
+        }
+
+        .fade-enter-from,
+        .fade-leave-to {
+            opacity: 0;
+        }
+
+        .modal-enter-active,
+        .modal-leave-active {
+            transition: all 0.3s ease;
+        }
+
+        .modal-enter-from,
+        .modal-leave-to {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="grid-bg"></div>
+
+        <transition name="fade">
+            <div v-if="loading"
+                class="fixed inset-0 bg-black/80 backdrop-blur-xl z-50 flex items-center justify-center">
+                <div class="text-center">
+                    <div class="loader mx-auto mb-4"></div>
+                    <p class="text-white/80 text-sm">Loading creative universe...</p>
+                </div>
+            </div>
+        </transition>
+
+        <main class="relative z-10 max-w-6xl mx-auto px-4 py-12 md:py-20">
+            <!-- Hero Section -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="md:col-span-1 bento-item p-8 text-center group">
+                    <div class="relative inline-block">
+                        <div
+                            class="w-32 h-32 rounded-full mx-auto overflow-hidden ring-4 ring-purple-500/30 group-hover:ring-purple-500/50 transition-all duration-500">
+                            <img :src="data.logoUrl || defaultLogo" class="w-full h-full object-cover" alt="Avatar"
+                                @error="imgError">
+                        </div>
+                        <div class="absolute -top-2 -right-2 text-3xl animate-bounce">✨</div>
+                    </div>
+                    <h1 class="text-3xl font-bold mt-4 gradient-text">{{ data.shopName || 'Creative Studio' }}</h1>
+                    <p class="text-gray-400 text-sm mt-2">{{ data.shopDesc || 'Bringing imagination to life through digital art' }}</p>
+                    <div class="flex items-center justify-center gap-2 mt-4">
+                        <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+                        <span class="text-xs text-gray-400">{{ data.statusText || 'Open for Commissions' }}</span>
+                    </div>
+                    <div class="flex flex-wrap justify-center gap-2 mt-4">
+                        <span v-for="badge in data.badges" :key="badge"
+                            class="px-3 py-1 rounded-full text-xs font-medium bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                            {{ badge }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="md:col-span-2 bento-item p-8">
+                    <h3 class="text-xl font-semibold mb-4 gradient-text">Quick Actions</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <a :href="data.queueUrl || '#'" target="_blank" class="btn-primary-custom text-center">
+                            <i class="fas fa-list-check mr-2"></i> Check Queue
+                        </a>
+                        <a :href="data.detailUrl || '#'" target="_blank" class="btn-secondary-custom text-center">
+                            <i class="fas fa-image mr-2"></i> Portfolio Detail
+                        </a>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-white/10">
+                        <div class="text-center">
+                            <p class="text-2xl font-bold gradient-text">{{ (data.portfolio || []).length }}</p>
+                            <p class="text-xs text-gray-500">Artworks</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-2xl font-bold gradient-text">{{ (data.prices || []).length }}</p>
+                            <p class="text-xs text-gray-500">Packages</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-2xl font-bold gradient-text">{{ (data.contacts || []).length }}</p>
+                            <p class="text-xs text-gray-500">Contacts</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Portfolio Gallery -->
+            <div class="bento-item p-8 mb-8">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold gradient-text">Portfolio</h2>
+                        <p class="text-gray-500 text-sm mt-1">Latest creative works</p>
+                    </div>
+                    <i class="fas fa-images text-3xl text-purple-500/50"></i>
+                </div>
+                <div v-if="loadingPortfolio" class="grid grid-cols-3 gap-4">
+                    <div v-for="i in 6" :key="i" class="aspect-square rounded-2xl bg-white/5 animate-pulse"></div>
+                </div>
+                <div v-else class="gallery-grid">
+                    <div v-for="item in data.portfolio" :key="item.name" class="gallery-item"
+                        @click="openImageModal(item.img)">
+                        <img :src="item.img" :alt="item.name" loading="lazy" @error="imgError">
+                    </div>
+                </div>
+            </div>
+
+            <!-- About & Style Tags -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div class="bento-item p-8">
+                    <div class="flex items-center gap-3 mb-4">
+                        <i class="fas fa-store text-2xl text-purple-400"></i>
+                        <h2 class="text-xl font-semibold">About Studio</h2>
+                    </div>
+                    <p class="text-gray-300 leading-relaxed">{{ data.aboutText || aboutText }}</p>
+                    <div class="mt-6">
+                        <p class="text-sm text-gray-400 mb-3">Style Tags</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span v-for="tag in data.styleTags" :key="tag"
+                                class="px-3 py-1 rounded-full text-xs bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                                #{{ tag }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bento-item p-8">
+                    <div class="flex items-center gap-3 mb-4">
+                        <i class="fas fa-tags text-2xl text-pink-400"></i>
+                        <h2 class="text-xl font-semibold">Pricing</h2>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div v-for="item in (data.prices || []).slice(0, 4)" :key="item.name" class="price-card p-4">
+                            <p class="text-xs text-gray-400 mb-1">{{ item.name }}</p>
+                            <p class="text-xl font-bold gradient-text">{{ formatPrice(item.price) }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ item.detail }}</p>
+                        </div>
+                    </div>
+                    <button class="btn-secondary-custom w-full mt-4 text-sm justify-center" @click="scrollToPrices">
+                        View All Packages <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Do & Don't -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div class="bento-item p-8">
+                    <div class="flex items-center gap-3 mb-4">
+                        <i class="fas fa-check-circle text-2xl text-green-400"></i>
+                        <h2 class="text-xl font-semibold">What I Do</h2>
+                    </div>
+                    <ul class="space-y-3">
+                        <li v-for="item in data.doList" :key="item" class="flex items-start gap-3">
+                            <i class="fas fa-check text-green-400 mt-1"></i>
+                            <span class="text-gray-300">{{ item }}</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bento-item p-8">
+                    <div class="flex items-center gap-3 mb-4">
+                        <i class="fas fa-times-circle text-2xl text-red-400"></i>
+                        <h2 class="text-xl font-semibold">What I Don't</h2>
+                    </div>
+                    <ul class="space-y-3">
+                        <li v-for="item in data.dontList" :key="item" class="flex items-start gap-3">
+                            <i class="fas fa-times text-red-400 mt-1"></i>
+                            <span class="text-gray-300">{{ item }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Full Pricing Section -->
+            <div id="pricing-section" class="bento-item p-8 mb-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <i class="fas fa-crown text-2xl text-yellow-400"></i>
+                    <h2 class="text-2xl font-bold gradient-text">Complete Pricing</h2>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <div v-for="item in data.prices" :key="item.name" class="price-card">
+                        <p class="text-xs text-gray-400 mb-1">{{ item.name }}</p>
+                        <p class="text-2xl font-bold gradient-text">{{ formatPrice(item.price) }}</p>
+                        <p class="text-xs text-gray-500 mt-2">{{ item.detail }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How to Order -->
+            <div class="bento-item p-8 mb-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <i class="fas fa-clipboard-list text-2xl text-purple-400"></i>
+                    <h2 class="text-2xl font-bold gradient-text">How to Order</h2>
+                </div>
+                <div class="space-y-6">
+                    <div v-for="step in data.timeline" :key="step.step" class="timeline-item">
+                        <div class="timeline-dot">{{ step.step }}</div>
+                        <div class="flex-1 pb-6">
+                            <p class="font-medium text-white">{{ step.text }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ getSpeedText(step.speed) }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6 pt-6 border-t border-white/10">
+                    <p class="text-sm text-gray-400 mb-3">Payment Methods</p>
+                    <div class="flex flex-wrap gap-3">
+                        <span v-for="payment in data.payments" :key="payment"
+                            class="px-4 py-2 rounded-full text-sm bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                            <i :class="getPaymentIcon(payment)"></i> {{ payment }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Groups & Community -->
+            <div class="bento-item p-8 mb-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <i class="fas fa-users text-2xl text-blue-400"></i>
+                    <h2 class="text-2xl font-bold gradient-text">{{ data.groupTitle || 'Community' }}</h2>
+                </div>
+                <p class="text-gray-400 mb-6">{{ data.groupDesc || 'Join our creative community' }}</p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <a v-for="group in data.groups" :key="group.name" :href="group.url" target="_blank"
+                        class="group relative overflow-hidden rounded-2xl">
+                        <div class="aspect-square overflow-hidden rounded-2xl">
+                            <img :src="group.img" :alt="group.name"
+                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                @error="imgError">
+                        </div>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+                            <p class="text-white text-sm font-medium">{{ group.name }}</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="flex flex-wrap gap-3">
+                    <a v-for="btn in data.groupBtns" :key="btn.label" :href="btn.url" target="_blank"
+                        class="btn-secondary-custom text-sm">
+                        <i :class="btn.icon"></i> {{ btn.label }}
+                    </a>
+                </div>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="bento-item p-8 mb-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <i class="fas fa-paper-plane text-2xl text-pink-400"></i>
+                    <h2 class="text-2xl font-bold gradient-text">Connect With Me</h2>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <a v-for="contact in data.contacts" :key="contact.label" :href="contact.url" target="_blank"
+                        class="flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all hover:scale-105"
+                        :style="{ background: contact.bg, color: contact.text }">
+                        <i :class="contact.icon"></i> {{ contact.label }}
+                    </a>
+                </div>
+            </div>
+
+            <div class="text-center mb-8">
+                <a :href="data.viewAllUrl || '#'" target="_blank"
+                    class="inline-flex items-center gap-2 px-8 py-4 rounded-full text-sm transition-all hover:scale-105 bg-white/5 border border-white/10 text-gray-400 hover:text-purple-400 hover:border-purple-400">
+                    <i class="fas fa-arrow-up-right-from-square"></i> View All Galleries
+                </a>
+            </div>
+
+            <div class="text-center pt-8 border-t border-white/10">
+                <p class="font-bold gradient-text mb-1">{{ data.footerName || 'Creative Studio' }}</p>
+                <p class="text-xs text-gray-600">{{ data.footerText || '© 2025 All rights reserved' }}</p>
+            </div>
+        </main>
+
+        <transition name="modal">
+            <div v-if="modalImage"
+                class="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 flex items-center justify-center p-4"
+                @click="closeModal">
+                <div class="max-w-4xl max-h-[90vh] rounded-2xl overflow-hidden" @click.stop>
+                    <img :src="modalImage" class="w-full h-full object-contain" alt="Preview">
+                    <button
+                        class="absolute top-4 right-4 w-12 h-12 rounded-full bg-black/50 backdrop-blur text-white hover:bg-black/70 transition-all">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+    <script>
+        const { createApp, ref, onMounted } = Vue;
+
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzPkxoHBWAljZP0QxnONM51e-dRWujZS9uiX96LjqPWlDSp9pusO1p4uPVYbkWg8aNM/exec';
+
+        createApp({
+            setup() {
+                const loading = ref(true);
+                const loadingPortfolio = ref(true);
+                const modalImage = ref(null);
+
+                const data = ref({
+                    shopName: '',
+                    shopDesc: '',
+                    statusText: '',
+                    statusColor: '#4ade80',
+                    queueUrl: '',
+                    detailUrl: '',
+                    aboutText: '',
+                    styleTags: [],
+                    badges: [],
+                    logoUrl: '',
+                    viewAllUrl: '',
+                    footerName: '',
+                    footerText: '',
+                    groupTitle: '',
+                    groupDesc: '',
+                    portfolio: [],
+                    prices: [],
+                    doList: [],
+                    dontList: [],
+                    timeline: [],
+                    payments: [],
+                    groups: [],
+                    groupBtns: [],
+                    contacts: []
+                });
+
+                const defaultLogo = 'https://placehold.co/200x200/7c3aed/ffffff?text=CS';
+                const aboutText = 'Welcome to my creative studio! I specialize in bringing imagination to life through digital art.';
+
+                const formatPrice = (price) => {
+                    if (!price) return 'POA';
+                    return price.toString().includes('POA') ? 'POA' : '฿' + price;
+                };
+
+                const getSpeedText = (speed) => {
+                    const texts = {
+                        fast: '⚡ Fast (1-2 days)',
+                        mid: '⏳ Medium (3-5 days)',
+                        slow: '🐢 Slow (5-7 days)'
+                    };
+                    return texts[speed] || 'Standard';
+                };
+
+                const getPaymentIcon = (payment) => {
+                    const icons = {
+                        PromptPay: 'fas fa-mobile-alt',
+                        TrueMoney: 'fas fa-wallet',
+                        'Bank Transfer': 'fas fa-university',
+                        PayPal: 'fab fa-paypal'
+                    };
+                    return icons[payment] || 'fas fa-money-bill';
+                };
+
+                const scrollToPrices = () => {
+                    const section = document.getElementById('pricing-section');
+                    if (section) section.scrollIntoView({ behavior: 'smooth' });
+                };
+
+                const openImageModal = (img) => {
+                    modalImage.value = img;
+                    document.body.style.overflow = 'hidden';
+                };
+
+                const closeModal = () => {
+                    modalImage.value = null;
+                    document.body.style.overflow = '';
+                };
+
+                const imgError = (e) => {
+                    e.target.src = 'https://placehold.co/400x400/7c3aed/ffffff?text=No+Image';
+                };
+
+                const loadDefaultData = () => {
+                    data.value.shopName = 'Creative Studio';
+                    data.value.shopDesc = 'Bringing imagination to life through digital art';
+                    data.value.statusText = 'Open for Commissions';
+                    data.value.styleTags = ['Fantasy', 'Sci-Fi', 'Character Design', 'Illustration'];
+                    data.value.badges = ['✨ Open Commission', '⚡ Fast Turnaround', '🎨 Custom Art'];
+                    data.value.footerName = 'Creative Studio';
+                    data.value.footerText = '© 2025 All rights reserved';
+                    data.value.groupTitle = 'Art Communities';
+                    data.value.groupDesc = 'Join our creative community';
+
+                    data.value.portfolio = [
+                        { img: 'https://placehold.co/400x400/7c3aed/ffffff?text=Art+1', name: 'Artwork 1', url: '#' },
+                        { img: 'https://placehold.co/400x400/f472b6/ffffff?text=Art+2', name: 'Artwork 2', url: '#' },
+                        { img: 'https://placehold.co/400x400/60a5fa/ffffff?text=Art+3', name: 'Artwork 3', url: '#' },
+                        { img: 'https://placehold.co/400x400/4ade80/ffffff?text=Art+4', name: 'Artwork 4', url: '#' }
+                    ];
+
+                    data.value.prices = [
+                        { type: 'purple', name: 'Sketch', price: '150', detail: 'Rough sketch' },
+                        { type: 'pink', name: 'Line Art', price: '250', detail: 'Clean linework' },
+                        { type: 'gold', name: 'Flat Color', price: '350', detail: 'Base colors' },
+                        { type: 'blue', name: 'Full Render', price: '800', detail: 'Full detail' }
+                    ];
+
+                    data.value.doList = ['Original Characters', 'Fan Art', 'Couple/BL/GL', 'Fantasy Themes'];
+                    data.value.dontList = ['Real Person Portraits', 'AI Generated', 'NSFW Content'];
+
+                    data.value.timeline = [
+                        { step: 1, text: 'Send me your idea and references', speed: 'fast' },
+                        { step: 2, text: 'Wait for sketch approval', speed: 'mid' },
+                        { step: 3, text: '50% payment for sketch confirmation', speed: 'fast' },
+                        { step: 4, text: 'Receive final artwork', speed: 'mid' }
+                    ];
+
+                    data.value.payments = ['PromptPay', 'TrueMoney', 'Bank Transfer'];
+
+                    data.value.contacts = [
+                        { type: 'FB', label: 'Facebook', url: '#', icon: 'fab fa-facebook', bg: '#1877f2', text: '#fff' },
+                        { type: 'Line', label: 'Line', url: '#', icon: 'fab fa-line', bg: '#06c755', text: '#fff' },
+                        { type: 'IG', label: 'Instagram', url: '#', icon: 'fab fa-instagram', bg: 'linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)', text: '#fff' }
+                    ];
+                };
+
+                const loadDataFromGAS = () => {
+                    loading.value = true;
+
+                    const saved = localStorage.getItem('bioData');
+                    if (saved) {
+                        try {
+                            const parsed = JSON.parse(saved);
+                            Object.assign(data.value, parsed);
+                            loading.value = false;
+                            loadingPortfolio.value = false;
+                            initAnimations();
+                        } catch (e) { }
+                    }
+
+                    const callback = 'gasCallback_' + Date.now();
+                    const script = document.createElement('script');
+
+                    const timeout = setTimeout(() => {
+                        if (window[callback]) delete window[callback];
+                        if (document.body.contains(script)) document.body.removeChild(script);
+                        if (!saved) loadDefaultData();
+                        loading.value = false;
+                        loadingPortfolio.value = false;
+                        initAnimations();
+                    }, 10000);
+
+                    window[callback] = (response) => {
+                        clearTimeout(timeout);
+                        delete window[callback];
+                        if (document.body.contains(script)) document.body.removeChild(script);
+
+                        if (response && response.success && response.data) {
+                            Object.keys(response.data).forEach(key => {
+                                if (response.data[key] !== undefined && response.data[key] !== null) {
+                                    if (typeof response.data[key] === 'string') {
+                                        try {
+                                            const parsed = JSON.parse(response.data[key]);
+                                            data.value[key] = parsed;
+                                        } catch (e) {
+                                            data.value[key] = response.data[key];
+                                        }
+                                    } else {
+                                        data.value[key] = response.data[key];
+                                    }
+                                }
+                            });
+
+                            localStorage.setItem('bioData', JSON.stringify(data.value));
+                        } else if (!saved) {
+                            loadDefaultData();
+                        }
+
+                        loading.value = false;
+                        loadingPortfolio.value = false;
+                        initAnimations();
+                    };
+
+                    script.src = GAS_URL + '?action=getData&callback=' + callback;
+                    document.body.appendChild(script);
+                };
+
+                const initAnimations = () => {
+                    if (typeof gsap !== 'undefined') {
+                        try {
+                            gsap.registerPlugin(ScrollTrigger);
+                            gsap.utils.toArray('.bento-item').forEach((item, i) => {
+                                gsap.from(item, {
+                                    scrollTrigger: { trigger: item, start: 'top bottom-=100', toggleActions: 'play none none reverse' },
+                                    opacity: 0, y: 50, duration: 0.6, delay: i * 0.1, ease: 'power3.out'
+                                });
+                            });
+                        } catch (e) { }
+                    }
+                };
+
+                onMounted(() => {
+                    loadDataFromGAS();
+                });
+
+                return {
+                    loading,
+                    loadingPortfolio,
+                    modalImage,
+                    data,
+                    defaultLogo,
+                    aboutText,
+                    formatPrice,
+                    getSpeedText,
+                    getPaymentIcon,
+                    scrollToPrices,
+                    openImageModal,
+                    closeModal,
+                    imgError
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+
+</html>

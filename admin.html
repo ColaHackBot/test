@@ -1,0 +1,1956 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Admin Panel | Creative Bio System</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'gradient': 'gradient 8s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        gradient: {
+                            '0%, 100%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&family=Inter:opsz,wght@14..32,100..900&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <style>
+        :root {
+            --primary: #c084fc;
+            --primary-dark: #7c3aed;
+            --bg-dark: #0a0a0f;
+            --bg-card: #14141f;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .bg-gradient-animated {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(192, 132, 252, 0.15), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(244, 114, 182, 0.15), transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .sidebar-glass {
+            background: rgba(20, 20, 31, 0.95);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border);
+        }
+
+        .glass-card {
+            background: rgba(30, 30, 45, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .glass-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border-radius: 12px;
+            margin: 4px 12px;
+            position: relative;
+        }
+
+        .sidebar-item:hover {
+            color: var(--primary);
+            transform: translateX(4px);
+            background: rgba(192, 132, 252, 0.1);
+        }
+
+        .sidebar-item.active {
+            background: linear-gradient(135deg, rgba(192, 132, 252, 0.2), rgba(244, 114, 182, 0.1));
+            color: var(--primary);
+            border-left: 3px solid var(--primary);
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(10, 10, 15, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.2);
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #f472b6);
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(192, 132, 252, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(192, 132, 252, 0.15);
+            border: 1px solid rgba(192, 132, 252, 0.3);
+            padding: 10px 24px;
+            border-radius: 40px;
+            color: var(--primary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(192, 132, 252, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f87171, #ef4444);
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: rgba(10, 10, 15, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .list-item:hover {
+            border-color: var(--primary);
+            background: rgba(192, 132, 252, 0.05);
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-card);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .theme-preview {
+            cursor: pointer;
+            border: 2px solid transparent;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .theme-preview:hover {
+            transform: translateY(-4px);
+        }
+
+        .theme-preview.selected {
+            border-color: var(--primary);
+            transform: scale(1.02);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #c084fc, #f472b6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar-glass {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                position: fixed;
+            }
+
+            .sidebar-glass.open {
+                transform: translateX(0);
+            }
+
+            .ml-72 {
+                margin-left: 0;
+            }
+        }
+
+        .fade-enter-active,
+        .fade-leave-active {
+            transition: opacity 0.3s ease;
+        }
+
+        .fade-enter-from,
+        .fade-leave-to {
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="bg-gradient-animated"></div>
+
+        <!-- Login Screen -->
+        <transition name="fade">
+            <div v-if="!isLoggedIn"
+                class="fixed inset-0 flex items-center justify-center bg-black/90 backdrop-blur-xl z-50">
+                <div class="glass-card p-10 w-full max-w-md fade-in-up">
+                    <div class="text-center mb-8">
+                        <div
+                            class="w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500">
+                            <i class="fas fa-crown text-4xl text-white"></i>
+                        </div>
+                        <h1 class="text-3xl font-bold gradient-text">Admin Panel</h1>
+                        <p class="text-gray-400 text-sm mt-2">Creative Bio System Dashboard</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="form-label">Username</label>
+                            <input type="text" v-model="loginUser" class="form-input" placeholder="admin"
+                                @keyup.enter="doLogin">
+                        </div>
+                        <div>
+                            <label class="form-label">Password</label>
+                            <div class="relative">
+                                <input :type="showPassword ? 'text' : 'password'" v-model="loginPass"
+                                    class="form-input pr-12" placeholder="••••••••" @keyup.enter="doLogin">
+                                <button type="button"
+                                    class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                                    @click="showPassword = !showPassword">
+                                    <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button class="btn-primary w-full justify-center" @click="doLogin">
+                            <i class="fas fa-sign-in-alt mr-2"></i> Sign In
+                        </button>
+                        <p class="text-xs text-center text-gray-500 mt-4">Default: admin / admin123</p>
+                    </div>
+                </div>
+            </div>
+        </transition>
+
+        <!-- Main Admin Interface -->
+        <div v-if="isLoggedIn" class="relative z-10">
+            <!-- Sidebar -->
+            <div class="sidebar-glass fixed left-0 top-0 bottom-0 w-72 overflow-y-auto z-40"
+                :class="{ open: sidebarOpen }">
+                <div class="p-6 border-b border-white/10">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
+                            <i class="fas fa-wand-magic-sparkles text-white text-lg"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold gradient-text">Bio Admin</p>
+                            <p class="text-xs text-gray-500">{{ currentUser }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="py-6">
+                    <div class="px-6 py-2 text-xs text-gray-500 uppercase tracking-wider">Main</div>
+                    <div class="sidebar-item" :class="{ active: currentPanel === 'dashboard' }"
+                        @click="showPanel('dashboard')">
+                        <i class="fas fa-chart-line w-5"></i> Dashboard
+                    </div>
+
+                    <div class="px-6 py-2 text-xs text-gray-500 uppercase tracking-wider mt-4">Content</div>
+                    <div class="sidebar-item" :class="{ active: currentPanel === 'header' }"
+                        @click="showPanel('header')">
+                        <i class="fas fa-heading w-5"></i> Header
+                    </div>
+                    <div class="sidebar-item" :class="{ active: currentPanel === 'portfolio' }"
+                        @click="showPanel('portfolio')">
+                        <i class="fas fa-images w-5"></i> Portfolio
+                    </div>
+                    <div class="sidebar-item" :class="{ active: currentPanel === 'prices' }"
+                        @click="showPanel('prices')">
+                        <i class="fas fa-tags w-5"></i> Pricing
+                    </div>
+                    <div class="sidebar-item" :class="{ active: currentPanel === 'dodont' }"
+                        @click="showPanel('dodont')">
+                        <i class="fas fa-list-check w-5"></i> Do & Don't
+                    </div>
+                    <div class="sidebar-item" :class="{ active: currentPanel === 'order' }" @click="showPanel('order')">
+                        <i class="fas fa-clipboard-list w-5"></i> Order Process
+                    </div>
+                    <div class="sidebar-item" :class="{ active: currentPanel === 'groups' }"
+                        @click="showPanel('groups')">
+                        <i class="fas fa-layer-group w-5"></i> Communities
+                    </div>
+                    <div class="sidebar-item" :class="{ active: currentPanel === 'contacts' }"
+                        @click="showPanel('contacts')">
+                        <i class="fas fa-paper-plane w-5"></i> Contacts
+                    </div>
+
+                    <div class="px-6 py-2 text-xs text-gray-500 uppercase tracking-wider mt-4">Design</div>
+                    <div class="sidebar-item" :class="{ active: currentPanel === 'themes' }"
+                        @click="showPanel('themes')">
+                        <i class="fas fa-palette w-5"></i> Themes
+                    </div>
+                    <div class="sidebar-item" :class="{ active: currentPanel === 'colors' }"
+                        @click="showPanel('colors')">
+                        <i class="fas fa-droplet w-5"></i> Colors
+                    </div>
+                    <div class="sidebar-item" :class="{ active: currentPanel === 'fonts' }" @click="showPanel('fonts')">
+                        <i class="fas fa-font w-5"></i> Fonts
+                    </div>
+
+                    <div class="px-6 py-2 text-xs text-gray-500 uppercase tracking-wider mt-4">System</div>
+                    <div class="sidebar-item" :class="{ active: currentPanel === 'sheets' }"
+                        @click="showPanel('sheets')">
+                        <i class="fab fa-google w-5"></i> Google Sheets
+                    </div>
+                    <div class="sidebar-item" :class="{ active: currentPanel === 'data' }" @click="showPanel('data')">
+                        <i class="fas fa-database w-5"></i> Data Manager
+                    </div>
+                    <div class="sidebar-item" :class="{ active: currentPanel === 'security' }"
+                        @click="showPanel('security')">
+                        <i class="fas fa-shield-alt w-5"></i> Security
+                    </div>
+
+                    <div class="border-t border-white/10 my-4 mx-6"></div>
+
+                    <div class="sidebar-item" @click="doLogout">
+                        <i class="fas fa-sign-out-alt w-5"></i> Logout
+                    </div>
+                </nav>
+            </div>
+
+            <!-- Main Content -->
+            <div class="lg:ml-72 min-h-screen transition-all duration-300">
+                <!-- Top Bar -->
+                <div
+                    class="sticky top-0 z-30 bg-black/50 backdrop-blur-xl border-b border-white/10 px-8 py-4 flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <button class="lg:hidden btn-secondary p-2 rounded-lg" @click="toggleSidebar">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <h1 class="text-xl font-semibold gradient-text">{{ panelTitle }}</h1>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <span v-if="autoSave" class="status-badge bg-green-500/20 text-green-400">
+                            <i class="fas fa-check-circle"></i> Auto-save
+                        </span>
+                        <button class="btn-primary px-5 py-2 text-sm" @click="saveAll">
+                            <i class="fas fa-save mr-2"></i> Save
+                        </button>
+                        <a href="index.html" target="_blank" class="btn-secondary px-5 py-2 text-sm">
+                            <i class="fas fa-eye mr-2"></i> Preview
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Panels -->
+                <div class="p-8">
+                    <!-- Dashboard Panel -->
+                    <div v-show="currentPanel === 'dashboard'" class="space-y-6 fade-in-up">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                            <div class="glass-card p-6">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-gray-400">Portfolio</span>
+                                    <i class="fas fa-images text-2xl text-purple-400"></i>
+                                </div>
+                                <p class="text-4xl font-bold gradient-text">{{ stats.portfolio }}</p>
+                                <p class="text-xs text-gray-500 mt-2">Artworks</p>
+                            </div>
+                            <div class="glass-card p-6">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-gray-400">Packages</span>
+                                    <i class="fas fa-tags text-2xl text-pink-400"></i>
+                                </div>
+                                <p class="text-4xl font-bold gradient-text">{{ stats.prices }}</p>
+                                <p class="text-xs text-gray-500 mt-2">Pricing Plans</p>
+                            </div>
+                            <div class="glass-card p-6">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-gray-400">Contacts</span>
+                                    <i class="fas fa-paper-plane text-2xl text-green-400"></i>
+                                </div>
+                                <p class="text-4xl font-bold gradient-text">{{ stats.contacts }}</p>
+                                <p class="text-xs text-gray-500 mt-2">Social Links</p>
+                            </div>
+                            <div class="glass-card p-6">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-gray-400">Communities</span>
+                                    <i class="fas fa-layer-group text-2xl text-yellow-400"></i>
+                                </div>
+                                <p class="text-4xl font-bold gradient-text">{{ stats.groups }}</p>
+                                <p class="text-xs text-gray-500 mt-2">Groups</p>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-6">
+                            <h3 class="font-semibold mb-4 gradient-text">Analytics Overview</h3>
+                            <canvas id="visitorChart" height="200"></canvas>
+                        </div>
+
+                        <div class="glass-card p-6">
+                            <h3 class="font-semibold mb-4 gradient-text">Recent Activity</h3>
+                            <div class="space-y-2">
+                                <div v-for="(log, idx) in historyLogs.slice(0, 5)" :key="idx"
+                                    class="flex items-center justify-between py-3 border-b border-white/10">
+                                    <span class="text-sm">{{ log.time }}</span>
+                                    <span class="text-sm text-gray-400">{{ log.action }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Header Panel -->
+                    <div v-show="currentPanel === 'header'" class="space-y-6 fade-in-up">
+                        <div class="glass-card p-6">
+                            <h3 class="font-semibold mb-6 gradient-text">General Information</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="form-label">Shop Name</label>
+                                    <input type="text" v-model="data.shopName" class="form-input"
+                                        placeholder="Creative Studio">
+                                </div>
+                                <div>
+                                    <label class="form-label">Tagline / Description</label>
+                                    <input type="text" v-model="data.shopDesc" class="form-input"
+                                        placeholder="Bringing imagination to life">
+                                </div>
+                                <div>
+                                    <label class="form-label">Status Text</label>
+                                    <input type="text" v-model="data.statusText" class="form-input"
+                                        placeholder="Open for Commissions">
+                                </div>
+                                <div>
+                                    <label class="form-label">Status Color</label>
+                                    <input type="color" v-model="data.statusColor" class="form-input h-12">
+                                </div>
+                                <div>
+                                    <label class="form-label">Logo URL</label>
+                                    <input type="text" v-model="data.logoUrl" class="form-input"
+                                        placeholder="https://...">
+                                </div>
+                                <div>
+                                    <label class="form-label">Queue Button URL</label>
+                                    <input type="text" v-model="data.queueUrl" class="form-input"
+                                        placeholder="https://...">
+                                </div>
+                                <div>
+                                    <label class="form-label">Detail Button URL</label>
+                                    <input type="text" v-model="data.detailUrl" class="form-input"
+                                        placeholder="https://...">
+                                </div>
+                                <div>
+                                    <label class="form-label">View All URL</label>
+                                    <input type="text" v-model="data.viewAllUrl" class="form-input"
+                                        placeholder="https://...">
+                                </div>
+                                <div>
+                                    <label class="form-label">Footer Name</label>
+                                    <input type="text" v-model="data.footerName" class="form-input"
+                                        placeholder="Creative Studio">
+                                </div>
+                                <div>
+                                    <label class="form-label">Footer Text</label>
+                                    <input type="text" v-model="data.footerText" class="form-input"
+                                        placeholder="© 2025 All rights reserved">
+                                </div>
+                                <div>
+                                    <label class="form-label">Group Title</label>
+                                    <input type="text" v-model="data.groupTitle" class="form-input"
+                                        placeholder="Community">
+                                </div>
+                                <div>
+                                    <label class="form-label">Group Description</label>
+                                    <input type="text" v-model="data.groupDesc" class="form-input"
+                                        placeholder="Join our community">
+                                </div>
+                                <div>
+                                    <label class="form-label">About Text</label>
+                                    <textarea v-model="data.aboutText" class="form-textarea" rows="3"
+                                        placeholder="About your studio..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-6">
+                            <h3 class="font-semibold mb-4 gradient-text">Badges</h3>
+                            <div class="flex gap-3 mb-6">
+                                <input type="text" v-model="newBadge" class="form-input flex-1"
+                                    placeholder="Add new badge" @keyup.enter="addBadge">
+                                <button class="btn-primary" @click="addBadge">Add</button>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <span v-for="(badge, idx) in data.badges" :key="idx"
+                                    class="px-4 py-2 rounded-full text-sm flex items-center gap-2 bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                                    {{ badge }}
+                                    <i class="fas fa-times cursor-pointer hover:text-red-400"
+                                        @click="removeBadge(idx)"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-6">
+                            <h3 class="font-semibold mb-4 gradient-text">Style Tags</h3>
+                            <div class="flex gap-3 mb-6">
+                                <input type="text" v-model="newStyleTag" class="form-input flex-1"
+                                    placeholder="Add style tag" @keyup.enter="addStyleTag">
+                                <button class="btn-primary" @click="addStyleTag">Add</button>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <span v-for="(tag, idx) in data.styleTags" :key="idx"
+                                    class="px-4 py-2 rounded-full text-sm flex items-center gap-2 bg-pink-500/20 text-pink-400 border border-pink-500/30">
+                                    #{{ tag }}
+                                    <i class="fas fa-times cursor-pointer hover:text-red-400"
+                                        @click="removeStyleTag(idx)"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Panel -->
+                    <div v-show="currentPanel === 'portfolio'" class="space-y-6 fade-in-up">
+                        <div class="glass-card p-6">
+                            <h3 class="font-semibold mb-6 gradient-text">Add New Artwork</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                <div>
+                                    <label class="form-label">Image URL</label>
+                                    <input type="text" v-model="newPortfolio.img" class="form-input"
+                                        placeholder="https://...">
+                                </div>
+                                <div>
+                                    <label class="form-label">Artwork Name</label>
+                                    <input type="text" v-model="newPortfolio.name" class="form-input"
+                                        placeholder="Artwork title">
+                                </div>
+                                <div>
+                                    <label class="form-label">Link (Optional)</label>
+                                    <input type="text" v-model="newPortfolio.url" class="form-input" placeholder="#">
+                                </div>
+                            </div>
+                            <button class="btn-primary" @click="addPortfolio">
+                                <i class="fas fa-plus mr-2"></i> Add Artwork
+                            </button>
+                        </div>
+
+                        <div class="glass-card p-6">
+                            <h3 class="font-semibold mb-6 gradient-text">Portfolio Gallery</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div v-for="(item, idx) in data.portfolio" :key="idx" class="relative group">
+                                    <div class="aspect-square rounded-xl overflow-hidden">
+                                        <img :src="item.img" class="w-full h-full object-cover" @error="imgError">
+                                    </div>
+                                    <p class="text-sm mt-2 truncate">{{ item.name }}</p>
+                                    <button
+                                        class="absolute top-2 right-2 bg-black/60 rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                                        @click="removePortfolio(idx)">
+                                        <i class="fas fa-trash-alt text-xs text-red-400"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <p v-if="!data.portfolio || !data.portfolio.length" class="text-center text-gray-500 py-8">
+                                No artworks added yet</p>
+                        </div>
+                    </div>
+
+                    <!-- Prices Panel -->
+                    <div v-show="currentPanel === 'prices'" class="space-y-6 fade-in-up">
+                        <div class="glass-card p-6">
+                            <h3 class="font-semibold mb-6 gradient-text">Add Pricing Package</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                <div>
+                                    <label class="form-label">Type</label>
+                                    <select v-model="newPrice.type" class="form-select">
+                                        <option value="purple">💜 Purple</option>
+                                        <option value="pink">🩷 Pink</option>
+                                        <option value="gold">🌟 Gold</option>
+                                        <option value="silver">⚪ Silver</option>
+                                        <option value="blue">💙 Blue</option>
+                                        <option value="green">💚 Green</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="form-label">Package Name</label>
+                                    <input type="text" v-model="newPrice.name" class="form-input" placeholder="Sketch">
+                                </div>
+                                <div>
+                                    <label class="form-label">Price</label>
+                                    <input type="text" v-model="newPrice.price" class="form-input"
+                                        placeholder="150 or POA">
+                                </div>
+                                <div>
+                                    <label class="form-label">Details</label>
+                                    <input type="text" v-model="newPrice.detail" class="form-input"
+                                        placeholder="Description">
+                                </div>
+                            </div>
+                            <button class="btn-primary" @click="addPrice">Add Package</button>
+                        </div>
+
+                        <div class="glass-card p-6">
+                            <h3 class="font-semibold mb-6 gradient-text">All Packages</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                <div v-for="(item, idx) in data.prices" :key="idx"
+                                    class="list-item flex-col text-center">
+                                    <div class="w-12 h-12 rounded-full mb-2"
+                                        :style="{ background: getPriceColor(item.type) }"></div>
+                                    <p class="font-semibold">{{ item.name }}</p>
+                                    <p class="text-xl font-bold gradient-text">฿{{ item.price }}</p>
+                                    <p class="text-xs text-gray-500">{{ item.detail }}</p>
+                                    <button class="text-red-400 text-sm mt-2" @click="removePrice(idx)">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Do & Don't Panel -->
+                    <div v-show="currentPanel === 'dodont'" class="glass-card p-6 fade-in-up">
+                        <div class="grid grid-cols-2 gap-8">
+                            <div>
+                                <h3 class="font-semibold mb-4 text-green-400">What I Do</h3>
+                                <div class="flex gap-3 mb-4">
+                                    <input type="text" v-model="newDo" class="form-input flex-1" placeholder="Add item">
+                                    <button class="btn-primary" @click="addDo">Add</button>
+                                </div>
+                                <div class="space-y-2">
+                                    <div v-for="(item, idx) in data.doList" :key="idx" class="list-item">
+                                        <i class="fas fa-check text-green-400"></i>
+                                        <span class="flex-1">{{ item }}</span>
+                                        <button class="text-red-400" @click="removeDo(idx)"><i
+                                                class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold mb-4 text-red-400">What I Don't</h3>
+                                <div class="flex gap-3 mb-4">
+                                    <input type="text" v-model="newDont" class="form-input flex-1"
+                                        placeholder="Add item">
+                                    <button class="btn-primary" @click="addDont">Add</button>
+                                </div>
+                                <div class="space-y-2">
+                                    <div v-for="(item, idx) in data.dontList" :key="idx" class="list-item">
+                                        <i class="fas fa-times text-red-400"></i>
+                                        <span class="flex-1">{{ item }}</span>
+                                        <button class="text-red-400" @click="removeDont(idx)"><i
+                                                class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Process Panel -->
+                    <div v-show="currentPanel === 'order'" class="glass-card p-6 fade-in-up">
+                        <h3 class="font-semibold mb-4 gradient-text">Order Process</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <input type="number" v-model="newTimeline.step" class="form-input" placeholder="Step #">
+                            <input type="text" v-model="newTimeline.text" class="form-input" placeholder="Description">
+                            <select v-model="newTimeline.speed" class="form-select">
+                                <option value="fast">⚡ Fast (1-2 days)</option>
+                                <option value="mid">⏳ Medium (3-5 days)</option>
+                                <option value="slow">🐢 Slow (5-7 days)</option>
+                            </select>
+                        </div>
+                        <button class="btn-primary mb-6" @click="addTimeline">Add Step</button>
+
+                        <div class="space-y-3">
+                            <div v-for="(item, idx) in data.timeline" :key="idx" class="list-item">
+                                <div
+                                    class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center font-bold">
+                                    {{ item.step }}</div>
+                                <span class="flex-1">{{ item.text }}</span>
+                                <span class="text-xs text-gray-500">{{ item.speed }}</span>
+                                <button class="text-red-400" @click="removeTimeline(idx)"><i
+                                        class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 pt-6 border-t border-white/10">
+                            <h4 class="font-semibold mb-4">Payment Methods</h4>
+                            <div class="flex gap-3 mb-4">
+                                <input type="text" v-model="newPayment" class="form-input flex-1"
+                                    placeholder="Add payment method">
+                                <button class="btn-primary" @click="addPayment">Add</button>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <span v-for="(pay, idx) in data.payments" :key="idx"
+                                    class="px-4 py-2 rounded-full text-sm bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center gap-2">
+                                    {{ pay }}
+                                    <i class="fas fa-times cursor-pointer" @click="removePayment(idx)"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Communities Panel -->
+                    <div v-show="currentPanel === 'groups'" class="glass-card p-6 fade-in-up">
+                        <h3 class="font-semibold mb-4 gradient-text">Community Groups</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <input type="text" v-model="newGroup.img" class="form-input" placeholder="Image URL">
+                            <input type="text" v-model="newGroup.name" class="form-input" placeholder="Group name">
+                            <input type="text" v-model="newGroup.url" class="form-input" placeholder="Link URL">
+                        </div>
+                        <button class="btn-primary mb-6" @click="addGroup">Add Group</button>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div v-for="(item, idx) in data.groups" :key="idx" class="relative group">
+                                <div class="aspect-square rounded-xl overflow-hidden">
+                                    <img :src="item.img" class="w-full h-full object-cover" @error="imgError">
+                                </div>
+                                <p class="text-sm mt-2 truncate">{{ item.name }}</p>
+                                <button
+                                    class="absolute top-2 right-2 bg-black/60 rounded-full p-1 opacity-0 group-hover:opacity-100"
+                                    @click="removeGroup(idx)">
+                                    <i class="fas fa-times text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contacts Panel -->
+                    <div v-show="currentPanel === 'contacts'" class="glass-card p-6 fade-in-up">
+                        <h3 class="font-semibold mb-4 gradient-text">Contact Buttons</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <select v-model="newContact.type" class="form-select" @change="fillContactPreset">
+                                <option value="FB">Facebook</option>
+                                <option value="Line">Line</option>
+                                <option value="IG">Instagram</option>
+                                <option value="Twitter">Twitter/X</option>
+                                <option value="TikTok">TikTok</option>
+                                <option value="Discord">Discord</option>
+                                <option value="Email">Email</option>
+                            </select>
+                            <input type="text" v-model="newContact.label" class="form-input" placeholder="Button label">
+                            <input type="text" v-model="newContact.url" class="form-input" placeholder="Link URL">
+                            <button class="btn-primary" @click="addContact">Add Button</button>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <div v-for="(item, idx) in data.contacts" :key="idx" class="relative group">
+                                <a :href="item.url" target="_blank"
+                                    class="px-5 py-2 rounded-full text-sm flex items-center gap-2 transition-all hover:scale-105"
+                                    :style="{ background: item.bg, color: item.text }">
+                                    <i :class="item.icon"></i> {{ item.label }}
+                                </a>
+                                <button
+                                    class="absolute -top-2 -right-2 bg-red-500 rounded-full p-1 opacity-0 group-hover:opacity-100"
+                                    @click="removeContact(idx)">
+                                    <i class="fas fa-times text-white text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Themes Panel -->
+                    <div v-show="currentPanel === 'themes'" class="glass-card p-6 fade-in-up">
+                        <h3 class="font-semibold mb-4 gradient-text">Premium Themes</h3>
+                        <div class="flex gap-2 mb-6">
+                            <button v-for="cat in themeCategories" :key="cat.id"
+                                class="px-4 py-2 rounded-full text-sm transition-all"
+                                :class="selectedThemeCat === cat.id ? 'btn-primary' : 'btn-secondary'"
+                                @click="filterThemes(cat.id)">
+                                {{ cat.name }}
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                            <div v-for="theme in filteredThemes" :key="theme.id"
+                                class="theme-preview p-4 glass-card text-center"
+                                :class="{ selected: selectedTheme === theme.id }" @click="selectTheme(theme.id)">
+                                <div class="flex gap-1 justify-center mb-3">
+                                    <div v-for="color in theme.colors" :key="color" class="w-8 h-8 rounded-full"
+                                        :style="{ background: color }"></div>
+                                </div>
+                                <p class="text-sm">{{ theme.name }}</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="btn-primary" @click="applyTheme">Apply Theme</button>
+                            <button class="btn-secondary" @click="resetTheme">Reset to Default</button>
+                        </div>
+                    </div>
+
+                    <!-- Colors Panel -->
+                    <div v-show="currentPanel === 'colors'" class="glass-card p-6 fade-in-up">
+                        <h3 class="font-semibold mb-6 gradient-text">Color Customization</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div v-for="color in colorVars" :key="color.key" class="flex items-center gap-3">
+                                <label class="flex-1 text-sm">{{ color.label }}</label>
+                                <input type="color" :value="data.theme[color.key] || defaultColors[color.key]"
+                                    @input="updateColor(color.key, $event.target.value)"
+                                    class="w-12 h-10 rounded-lg border border-white/10">
+                                <input type="text" :value="data.theme[color.key] || defaultColors[color.key]"
+                                    @input="updateColor(color.key, $event.target.value)"
+                                    class="w-28 form-input text-sm">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fonts Panel -->
+                    <div v-show="currentPanel === 'fonts'" class="glass-card p-6 fade-in-up">
+                        <h3 class="font-semibold mb-6 gradient-text">Font Selection</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div v-for="font in fonts" :key="font"
+                                class="p-4 rounded-xl glass-card cursor-pointer text-center transition-all hover:scale-105"
+                                :class="{ 'border-purple-500': data.font === font }" @click="selectFont(font)">
+                                <p :style="{ fontFamily: font }" class="text-lg">Sample Text</p>
+                                <p class="text-xs text-gray-500 mt-2">{{ font }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Google Sheets Panel -->
+                    <div v-show="currentPanel === 'sheets'" class="glass-card p-6 fade-in-up">
+                        <h3 class="font-semibold mb-4 gradient-text">Google Sheets Integration</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="form-label">GAS Web App URL</label>
+                                <input type="text" v-model="gasUrl" class="form-input"
+                                    placeholder="https://script.google.com/macros/s/...">
+                                <p class="text-xs text-gray-500 mt-1">URL:
+                                    https://script.google.com/macros/s/AKfycbwI0z4r65uZj_JaXgm6X97R-6CFRLENZKGw1L2m-B2nYegQR9i5lxBnJmJTSbjIIcsJ/exec
+                                </p>
+                            </div>
+                            <div class="flex gap-3">
+                                <button class="btn-primary" @click="testConnection">Test Connection</button>
+                                <button class="btn-success" @click="saveGasUrl">Save URL</button>
+                                <button class="btn-secondary" @click="syncWithGAS">Sync from GAS</button>
+                            </div>
+                            <div v-if="connectionStatus" class="p-4 rounded-lg"
+                                :class="connectionStatus.type === 'success' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'">
+                                {{ connectionStatus.message }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Manager Panel -->
+                    <div v-show="currentPanel === 'data'" class="glass-card p-6 fade-in-up">
+                        <h3 class="font-semibold mb-6 gradient-text">Data Management</h3>
+                        <div class="flex gap-3 mb-8">
+                            <button class="btn-primary" @click="exportJSON"><i class="fas fa-download mr-2"></i> Export
+                                JSON</button>
+                            <button class="btn-secondary" @click="triggerImport"><i class="fas fa-upload mr-2"></i>
+                                Import JSON</button>
+                            <input type="file" ref="importFile" accept=".json" style="display: none"
+                                @change="importJSON">
+                            <button class="btn-danger" @click="confirmReset"><i class="fas fa-trash-alt mr-2"></i> Reset
+                                All</button>
+                        </div>
+
+                        <h3 class="font-semibold mb-4 gradient-text">Recent Backups</h3>
+                        <div class="space-y-2">
+                            <div v-for="(log, idx) in historyLogs.slice(0, 10)" :key="idx"
+                                class="flex items-center justify-between py-2 border-b border-white/10">
+                                <span class="text-sm">{{ log.time }}</span>
+                                <span class="text-sm text-gray-400">{{ log.action }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Panel -->
+                    <div v-show="currentPanel === 'security'" class="glass-card p-6 fade-in-up">
+                        <h3 class="font-semibold mb-6 gradient-text">Security Settings</h3>
+                        <div class="space-y-4 max-w-md">
+                            <div>
+                                <label class="form-label">New Username</label>
+                                <input type="text" v-model="security.newUser" class="form-input">
+                            </div>
+                            <div>
+                                <label class="form-label">Current Password</label>
+                                <input type="password" v-model="security.currentPass" class="form-input">
+                            </div>
+                            <div>
+                                <label class="form-label">New Password</label>
+                                <input type="password" v-model="security.newPass" class="form-input">
+                                <div class="mt-2 h-1 rounded-full overflow-hidden bg-white/10">
+                                    <div class="h-full transition-all"
+                                        :style="{ width: passwordStrength.width, background: passwordStrength.color }">
+                                    </div>
+                                </div>
+                                <p class="text-xs mt-1" :style="{ color: passwordStrength.color }">{{
+                                    passwordStrength.label }}</p>
+                            </div>
+                            <div>
+                                <label class="form-label">Confirm New Password</label>
+                                <input type="password" v-model="security.confirmPass" class="form-input">
+                            </div>
+                            <div class="flex gap-3">
+                                <button class="btn-primary" @click="changeCredentials">Update Credentials</button>
+                                <button class="btn-secondary" @click="resetCredentials">Reset to Default</button>
+                            </div>
+                            <p v-if="security.message" class="text-sm"
+                                :class="security.messageType === 'success' ? 'text-green-400' : 'text-red-400'">
+                                {{ security.message }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp, ref, computed, onMounted } = Vue;
+
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzPkxoHBWAljZP0QxnONM51e-dRWujZS9uiX96LjqPWlDSp9pusO1p4uPVYbkWg8aNM/exec';
+
+        createApp({
+            setup() {
+                // Auth
+                const isLoggedIn = ref(false);
+                const currentUser = ref('');
+                const loginUser = ref('');
+                const loginPass = ref('');
+                const showPassword = ref(false);
+
+                // UI
+                const sidebarOpen = ref(false);
+                const currentPanel = ref('dashboard');
+                const autoSave = ref(true);
+
+                // Data
+                const data = ref({
+                    shopName: '',
+                    shopDesc: '',
+                    statusText: '',
+                    statusColor: '#4ade80',
+                    queueUrl: '',
+                    detailUrl: '',
+                    aboutText: '',
+                    styleTags: [],
+                    badges: [],
+                    logoUrl: '',
+                    viewAllUrl: '',
+                    footerName: '',
+                    footerText: '',
+                    groupTitle: '',
+                    groupDesc: '',
+                    portfolio: [],
+                    prices: [],
+                    doList: [],
+                    dontList: [],
+                    timeline: [],
+                    payments: [],
+                    groups: [],
+                    groupBtns: [],
+                    contacts: [],
+                    theme: {},
+                    font: 'Plus Jakarta Sans'
+                });
+
+                // Form models
+                const newBadge = ref('');
+                const newStyleTag = ref('');
+                const newPortfolio = ref({ img: '', name: '', url: '#' });
+                const newPrice = ref({ type: 'purple', name: '', price: '', detail: '' });
+                const newDo = ref('');
+                const newDont = ref('');
+                const newTimeline = ref({ step: 1, text: '', speed: 'fast' });
+                const newPayment = ref('');
+                const newGroup = ref({ img: '', name: '', url: '#' });
+                const newContact = ref({ type: 'FB', label: '', url: '', icon: 'fab fa-facebook', bg: '#1877f2', text: '#fff' });
+
+                // GAS
+                const gasUrl = ref(GAS_URL);
+                const connectionStatus = ref(null);
+
+                // Security
+                const security = ref({
+                    newUser: '',
+                    currentPass: '',
+                    newPass: '',
+                    confirmPass: '',
+                    message: '',
+                    messageType: ''
+                });
+
+                // Theme
+                const themes = ref([]);
+                const selectedTheme = ref(null);
+                const selectedThemeCat = ref('all');
+                const themeCategories = ref([
+                    { id: 'all', name: 'All' },
+                    { id: 'sweet', name: '🌸 Sweet' },
+                    { id: 'dark', name: '🌙 Dark' },
+                    { id: 'nature', name: '🌿 Nature' },
+                    { id: 'vivid', name: '🎨 Vivid' }
+                ]);
+
+                // Fonts
+                const fonts = ref(['Plus Jakarta Sans', 'Inter', 'Space Grotesk', 'Outfit']);
+
+                // Colors
+                const colorVars = ref([
+                    { key: 'main', label: 'Primary Color' },
+                    { key: 'accent', label: 'Accent Color' },
+                    { key: 'bg', label: 'Background' },
+                    { key: 'cardBg', label: 'Card Background' },
+                    { key: 'textPrimary', label: 'Text Color' },
+                    { key: 'textSecondary', label: 'Secondary Text' }
+                ]);
+
+                const defaultColors = {
+                    main: '#c084fc',
+                    accent: '#f472b6',
+                    bg: '#0a0a0f',
+                    cardBg: '#14141f',
+                    textPrimary: '#ffffff',
+                    textSecondary: '#94a3b8'
+                };
+
+                // Stats
+                const stats = ref({ portfolio: 0, prices: 0, contacts: 0, groups: 0 });
+                const historyLogs = ref([]);
+                let visitorChart = null;
+
+                // Computed
+                const panelTitle = computed(() => {
+                    const titles = {
+                        dashboard: 'Dashboard',
+                        header: 'Header Settings',
+                        portfolio: 'Portfolio Manager',
+                        prices: 'Pricing Manager',
+                        dodont: 'Do & Don\'t',
+                        order: 'Order Process',
+                        groups: 'Communities',
+                        contacts: 'Contact Buttons',
+                        themes: 'Themes Gallery',
+                        colors: 'Color Customizer',
+                        fonts: 'Font Library',
+                        sheets: 'Google Sheets',
+                        data: 'Data Manager',
+                        security: 'Security'
+                    };
+                    return titles[currentPanel.value] || 'Admin Panel';
+                });
+
+                const filteredThemes = computed(() => {
+                    if (selectedThemeCat.value === 'all') return themes.value;
+                    return themes.value.filter(t => t.cat === selectedThemeCat.value);
+                });
+
+                const passwordStrength = computed(() => {
+                    const pass = security.value.newPass;
+                    let strength = 0;
+                    if (pass.length >= 6) strength++;
+                    if (pass.length >= 10) strength++;
+                    if (/[A-Z]/.test(pass)) strength++;
+                    if (/[0-9]/.test(pass)) strength++;
+                    if (/[^a-zA-Z0-9]/.test(pass)) strength++;
+
+                    const levels = [
+                        { width: '20%', color: '#f87171', label: 'Very Weak' },
+                        { width: '40%', color: '#fb923c', label: 'Weak' },
+                        { width: '60%', color: '#fbbf24', label: 'Medium' },
+                        { width: '80%', color: '#4ade80', label: 'Strong' },
+                        { width: '100%', color: '#22c55e', label: 'Very Strong' }
+                    ];
+                    return levels[Math.min(strength, 4)];
+                });
+
+                // Methods
+                const loadData = () => {
+                    const saved = localStorage.getItem('bioData');
+                    if (saved) {
+                        try {
+                            const parsed = JSON.parse(saved);
+                            Object.assign(data.value, parsed);
+                            updateStats();
+                        } catch (e) { }
+                    }
+
+                    const savedGasUrl = localStorage.getItem('gasUrl');
+                    if (savedGasUrl) {
+                        gasUrl.value = savedGasUrl;
+                    }
+                };
+
+                const updateStats = () => {
+                    stats.value.portfolio = data.value.portfolio?.length || 0;
+                    stats.value.prices = data.value.prices?.length || 0;
+                    stats.value.contacts = data.value.contacts?.length || 0;
+                    stats.value.groups = data.value.groups?.length || 0;
+                };
+
+                const saveToGAS = () => {
+                    return new Promise((resolve, reject) => {
+                        const callback = 'saveCallback_' + Date.now();
+                        const script = document.createElement('script');
+                        const dataStr = encodeURIComponent(JSON.stringify(data.value));
+
+                        const timeout = setTimeout(() => {
+                            if (window[callback]) delete window[callback];
+                            if (document.body.contains(script)) document.body.removeChild(script);
+                            reject(new Error('Timeout'));
+                        }, 10000);
+
+                        window[callback] = (response) => {
+                            clearTimeout(timeout);
+                            delete window[callback];
+                            if (document.body.contains(script)) document.body.removeChild(script);
+
+                            if (response && response.success) {
+                                resolve(response);
+                            } else {
+                                reject(new Error(response?.error || 'Save failed'));
+                            }
+                        };
+
+                        script.src = `${gasUrl.value}?action=saveData&data=${dataStr}&callback=${callback}`;
+                        document.body.appendChild(script);
+                    });
+                };
+
+                const syncFromGAS = () => {
+                    return new Promise((resolve, reject) => {
+                        const callback = 'syncCallback_' + Date.now();
+                        const script = document.createElement('script');
+
+                        const timeout = setTimeout(() => {
+                            if (window[callback]) delete window[callback];
+                            if (document.body.contains(script)) document.body.removeChild(script);
+                            reject(new Error('Timeout'));
+                        }, 10000);
+
+                        window[callback] = (response) => {
+                            clearTimeout(timeout);
+                            delete window[callback];
+                            if (document.body.contains(script)) document.body.removeChild(script);
+
+                            if (response && response.success && response.data) {
+                                Object.keys(response.data).forEach(key => {
+                                    if (response.data[key] !== undefined && response.data[key] !== null) {
+                                        if (typeof response.data[key] === 'string') {
+                                            try {
+                                                const parsed = JSON.parse(response.data[key]);
+                                                data.value[key] = parsed;
+                                            } catch (e) {
+                                                data.value[key] = response.data[key];
+                                            }
+                                        } else {
+                                            data.value[key] = response.data[key];
+                                        }
+                                    }
+                                });
+                                updateStats();
+                                resolve(response);
+                            } else {
+                                reject(new Error(response?.error || 'Sync failed'));
+                            }
+                        };
+
+                        script.src = `${gasUrl.value}?action=getData&callback=${callback}`;
+                        document.body.appendChild(script);
+                    });
+                };
+
+                const saveAll = async () => {
+                    localStorage.setItem('bioData', JSON.stringify(data.value));
+                    addToHistory('Data saved locally');
+                    updateStats();
+
+                    if (gasUrl.value) {
+                        try {
+                            await saveToGAS();
+                            addToHistory('Data synced to GAS');
+                            Swal.fire({ icon: 'success', title: 'Saved!', text: 'All changes have been saved and synced', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
+                        } catch (err) {
+                            Swal.fire({ icon: 'warning', title: 'Saved Locally', text: 'Saved locally but failed to sync with GAS', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
+                        }
+                    } else {
+                        Swal.fire({ icon: 'success', title: 'Saved!', text: 'All changes have been saved locally', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
+                    }
+                };
+
+                const syncWithGAS = async () => {
+                    if (!gasUrl.value) {
+                        Swal.fire({ icon: 'warning', title: 'No GAS URL', text: 'Please enter GAS URL first' });
+                        return;
+                    }
+
+                    Swal.fire({ title: 'Syncing...', text: 'Please wait', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
+
+                    try {
+                        await syncFromGAS();
+                        Swal.close();
+                        Swal.fire({ icon: 'success', title: 'Synced!', text: 'Data loaded from Google Sheets', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
+                        addToHistory('Data synced from GAS');
+                    } catch (err) {
+                        Swal.close();
+                        Swal.fire({ icon: 'error', title: 'Sync Failed', text: err.message });
+                    }
+                };
+
+                const addToHistory = (action) => {
+                    const log = {
+                        time: new Date().toLocaleString('th-TH'),
+                        action: action
+                    };
+                    historyLogs.value.unshift(log);
+                    if (historyLogs.value.length > 20) historyLogs.value.pop();
+                    localStorage.setItem('historyLogs', JSON.stringify(historyLogs.value));
+                };
+
+                const loadHistory = () => {
+                    const saved = localStorage.getItem('historyLogs');
+                    if (saved) {
+                        historyLogs.value = JSON.parse(saved);
+                    } else {
+                        historyLogs.value = [{ time: new Date().toLocaleString('th-TH'), action: 'System initialized' }];
+                    }
+                };
+
+                // Auth methods
+                const doLogin = () => {
+                    const savedUser = localStorage.getItem('adminUser') || 'admin';
+                    const savedPass = localStorage.getItem('adminPass') || 'admin123';
+
+                    if (loginUser.value === savedUser && loginPass.value === savedPass) {
+                        isLoggedIn.value = true;
+                        currentUser.value = loginUser.value;
+                        loginUser.value = '';
+                        loginPass.value = '';
+                        addToHistory('User logged in');
+                    } else {
+                        Swal.fire({ icon: 'error', title: 'Login Failed', text: 'Invalid username or password', toast: true, position: 'top-end' });
+                    }
+                };
+
+                const doLogout = () => {
+                    isLoggedIn.value = false;
+                    currentUser.value = '';
+                    addToHistory('User logged out');
+                };
+
+                // Panel navigation
+                const showPanel = (panel) => {
+                    currentPanel.value = panel;
+                    if (window.innerWidth <= 768) {
+                        sidebarOpen.value = false;
+                    }
+                };
+
+                const toggleSidebar = () => {
+                    sidebarOpen.value = !sidebarOpen.value;
+                };
+
+                // Badge management
+                const addBadge = () => {
+                    if (newBadge.value.trim()) {
+                        if (!data.value.badges) data.value.badges = [];
+                        data.value.badges.push(newBadge.value.trim());
+                        newBadge.value = '';
+                        saveAll();
+                    }
+                };
+
+                const removeBadge = (idx) => {
+                    data.value.badges.splice(idx, 1);
+                    saveAll();
+                };
+
+                const addStyleTag = () => {
+                    if (newStyleTag.value.trim()) {
+                        if (!data.value.styleTags) data.value.styleTags = [];
+                        data.value.styleTags.push(newStyleTag.value.trim());
+                        newStyleTag.value = '';
+                        saveAll();
+                    }
+                };
+
+                const removeStyleTag = (idx) => {
+                    data.value.styleTags.splice(idx, 1);
+                    saveAll();
+                };
+
+                // Portfolio management
+                const addPortfolio = () => {
+                    if (newPortfolio.value.img) {
+                        if (!data.value.portfolio) data.value.portfolio = [];
+                        data.value.portfolio.push({ ...newPortfolio.value });
+                        newPortfolio.value = { img: '', name: '', url: '#' };
+                        saveAll();
+                    } else {
+                        Swal.fire({ icon: 'warning', title: 'Please provide image URL', toast: true });
+                    }
+                };
+
+                const removePortfolio = (idx) => {
+                    data.value.portfolio.splice(idx, 1);
+                    saveAll();
+                };
+
+                // Price management
+                const addPrice = () => {
+                    if (newPrice.value.name && newPrice.value.price) {
+                        if (!data.value.prices) data.value.prices = [];
+                        data.value.prices.push({ ...newPrice.value });
+                        newPrice.value = { type: 'purple', name: '', price: '', detail: '' };
+                        saveAll();
+                    } else {
+                        Swal.fire({ icon: 'warning', title: 'Please fill all fields', toast: true });
+                    }
+                };
+
+                const removePrice = (idx) => {
+                    data.value.prices.splice(idx, 1);
+                    saveAll();
+                };
+
+                const getPriceColor = (type) => {
+                    const colors = { purple: '#c084fc', pink: '#f472b6', gold: '#fbbf24', silver: '#94a3b8', blue: '#60a5fa', green: '#4ade80' };
+                    return colors[type] || '#c084fc';
+                };
+
+                // Do/Dont management
+                const addDo = () => {
+                    if (newDo.value.trim()) {
+                        if (!data.value.doList) data.value.doList = [];
+                        data.value.doList.push(newDo.value.trim());
+                        newDo.value = '';
+                        saveAll();
+                    }
+                };
+
+                const removeDo = (idx) => {
+                    data.value.doList.splice(idx, 1);
+                    saveAll();
+                };
+
+                const addDont = () => {
+                    if (newDont.value.trim()) {
+                        if (!data.value.dontList) data.value.dontList = [];
+                        data.value.dontList.push(newDont.value.trim());
+                        newDont.value = '';
+                        saveAll();
+                    }
+                };
+
+                const removeDont = (idx) => {
+                    data.value.dontList.splice(idx, 1);
+                    saveAll();
+                };
+
+                // Timeline management
+                const addTimeline = () => {
+                    if (newTimeline.value.text) {
+                        if (!data.value.timeline) data.value.timeline = [];
+                        data.value.timeline.push({ ...newTimeline.value });
+                        data.value.timeline.sort((a, b) => a.step - b.step);
+                        newTimeline.value = { step: data.value.timeline.length + 1, text: '', speed: 'fast' };
+                        saveAll();
+                    } else {
+                        Swal.fire({ icon: 'warning', title: 'Please enter description', toast: true });
+                    }
+                };
+
+                const removeTimeline = (idx) => {
+                    data.value.timeline.splice(idx, 1);
+                    saveAll();
+                };
+
+                const addPayment = () => {
+                    if (newPayment.value.trim()) {
+                        if (!data.value.payments) data.value.payments = [];
+                        data.value.payments.push(newPayment.value.trim());
+                        newPayment.value = '';
+                        saveAll();
+                    }
+                };
+
+                const removePayment = (idx) => {
+                    data.value.payments.splice(idx, 1);
+                    saveAll();
+                };
+
+                // Groups management
+                const addGroup = () => {
+                    if (newGroup.value.name) {
+                        if (!data.value.groups) data.value.groups = [];
+                        data.value.groups.push({ ...newGroup.value });
+                        newGroup.value = { img: '', name: '', url: '#' };
+                        saveAll();
+                    } else {
+                        Swal.fire({ icon: 'warning', title: 'Please enter group name', toast: true });
+                    }
+                };
+
+                const removeGroup = (idx) => {
+                    data.value.groups.splice(idx, 1);
+                    saveAll();
+                };
+
+                // Contact management
+                const fillContactPreset = () => {
+                    const presets = {
+                        FB: { icon: 'fab fa-facebook', bg: '#1877f2', text: '#fff', label: 'Facebook' },
+                        Line: { icon: 'fab fa-line', bg: '#06c755', text: '#fff', label: 'Line' },
+                        IG: { icon: 'fab fa-instagram', bg: 'linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)', text: '#fff', label: 'Instagram' },
+                        Twitter: { icon: 'fab fa-x-twitter', bg: '#000000', text: '#fff', label: 'Twitter' },
+                        TikTok: { icon: 'fab fa-tiktok', bg: '#000000', text: '#fff', label: 'TikTok' },
+                        Discord: { icon: 'fab fa-discord', bg: '#5865f2', text: '#fff', label: 'Discord' },
+                        Email: { icon: 'fas fa-envelope', bg: '#ea4335', text: '#fff', label: 'Email' }
+                    };
+                    const preset = presets[newContact.value.type];
+                    if (preset) {
+                        newContact.value.icon = preset.icon;
+                        newContact.value.bg = preset.bg;
+                        newContact.value.text = preset.text;
+                        if (!newContact.value.label) newContact.value.label = preset.label;
+                    }
+                };
+
+                const addContact = () => {
+                    if (newContact.value.label && newContact.value.url) {
+                        if (!data.value.contacts) data.value.contacts = [];
+                        data.value.contacts.push({ ...newContact.value });
+                        newContact.value = { type: 'FB', label: '', url: '', icon: 'fab fa-facebook', bg: '#1877f2', text: '#fff' };
+                        saveAll();
+                    } else {
+                        Swal.fire({ icon: 'warning', title: 'Please fill all fields', toast: true });
+                    }
+                };
+
+                const removeContact = (idx) => {
+                    data.value.contacts.splice(idx, 1);
+                    saveAll();
+                };
+
+                // Theme functions
+                const loadThemes = () => {
+                    themes.value = [
+                        { id: 'sweet1', cat: 'sweet', name: 'Sweet Pink', colors: ['#fce4ec', '#f48fb1', '#e91e63'], theme: { main: '#e91e63', accent: '#f06292', bg: '#fce4ec', cardBg: '#fff0f5' } },
+                        { id: 'dark1', cat: 'dark', name: 'Dark Purple', colors: ['#0a0a0f', '#7c3aed', '#c084fc'], theme: { main: '#c084fc', accent: '#f472b6', bg: '#0a0a0f', cardBg: '#14141f' } },
+                        { id: 'nature1', cat: 'nature', name: 'Forest Green', colors: ['#1b2419', '#2d4a28', '#4ade80'], theme: { main: '#4ade80', accent: '#86efac', bg: '#1b2419', cardBg: '#2d4028' } },
+                        { id: 'vivid1', cat: 'vivid', name: 'Neon Glow', colors: ['#0a0a0a', '#84cc16', '#22d3ee'], theme: { main: '#84cc16', accent: '#22d3ee', bg: '#0a0a0a', cardBg: '#1a1a1a' } }
+                    ];
+                };
+
+                const filterThemes = (cat) => {
+                    selectedThemeCat.value = cat;
+                };
+
+                const selectTheme = (id) => {
+                    selectedTheme.value = id;
+                };
+
+                const applyTheme = () => {
+                    const theme = themes.value.find(t => t.id === selectedTheme.value);
+                    if (theme) {
+                        data.value.theme = { ...theme.theme };
+                        saveAll();
+                        Swal.fire({ icon: 'success', title: 'Theme applied', toast: true });
+                    }
+                };
+
+                const resetTheme = () => {
+                    data.value.theme = {};
+                    selectedTheme.value = null;
+                    saveAll();
+                    Swal.fire({ icon: 'info', title: 'Theme reset', toast: true });
+                };
+
+                // Color functions
+                const updateColor = (key, value) => {
+                    if (!data.value.theme) data.value.theme = {};
+                    data.value.theme[key] = value;
+                    saveAll();
+                };
+
+                // Font functions
+                const selectFont = (font) => {
+                    data.value.font = font;
+                    saveAll();
+                };
+
+                // GAS functions
+                const saveGasUrl = () => {
+                    if (gasUrl.value) {
+                        localStorage.setItem('gasUrl', gasUrl.value);
+                        Swal.fire({ icon: 'success', title: 'URL saved', toast: true });
+                    }
+                };
+
+                const testConnection = () => {
+                    if (!gasUrl.value) {
+                        connectionStatus.value = { type: 'error', message: 'Please enter GAS URL first' };
+                        return;
+                    }
+
+                    console.log('Testing connection to:', gasUrl.value);
+
+                    connectionStatus.value = { type: 'info', message: 'Testing connection...' };
+                    const callback = 'testCallback_' + Date.now();
+                    const script = document.createElement('script');
+
+                    const timeout = setTimeout(() => {
+                        if (window[callback]) delete window[callback];
+                        document.body.removeChild(script);
+                        connectionStatus.value = { type: 'error', message: 'Connection timeout' };
+                        console.error('Connection timeout');
+                    }, 8000);
+
+                    window[callback] = (response) => {
+                        clearTimeout(timeout);
+                        delete window[callback];
+                        document.body.removeChild(script);
+                        console.log('Response:', response);
+                        if (response && response.success) {
+                            connectionStatus.value = { type: 'success', message: 'Connected successfully!' };
+                        } else {
+                            connectionStatus.value = { type: 'error', message: 'Connection failed' };
+                        }
+                    };
+
+                    script.src = `${gasUrl.value}?action=test&callback=${callback}`;
+                    document.body.appendChild(script);
+                };
+
+                // Data management
+                const exportJSON = () => {
+                    const dataStr = JSON.stringify(data.value, null, 2);
+                    const blob = new Blob([dataStr], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `biodata_${new Date().toISOString().slice(0, 19)}.json`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    Swal.fire({ icon: 'success', title: 'Export successful', toast: true });
+                };
+
+                const triggerImport = () => {
+                    const input = document.querySelector('input[type="file"]');
+                    if (input) input.click();
+                };
+
+                const importJSON = (event) => {
+                    const file = event.target.files[0];
+                    if (!file) return;
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        try {
+                            const imported = JSON.parse(e.target.result);
+                            Object.assign(data.value, imported);
+                            saveAll();
+                            Swal.fire({ icon: 'success', title: 'Import successful', text: 'Data loaded' });
+                        } catch (err) {
+                            Swal.fire({ icon: 'error', title: 'Import failed', text: 'Invalid JSON file' });
+                        }
+                    };
+                    reader.readAsText(file);
+                    event.target.value = '';
+                };
+
+                const confirmReset = () => {
+                    Swal.fire({
+                        title: 'Reset All Data?',
+                        text: 'This action cannot be undone!',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, reset',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            data.value = {
+                                shopName: '',
+                                shopDesc: '',
+                                statusText: '',
+                                statusColor: '#4ade80',
+                                queueUrl: '',
+                                detailUrl: '',
+                                aboutText: '',
+                                styleTags: [],
+                                badges: [],
+                                logoUrl: '',
+                                viewAllUrl: '',
+                                footerName: '',
+                                footerText: '',
+                                groupTitle: '',
+                                groupDesc: '',
+                                portfolio: [],
+                                prices: [],
+                                doList: [],
+                                dontList: [],
+                                timeline: [],
+                                payments: [],
+                                groups: [],
+                                groupBtns: [],
+                                contacts: [],
+                                theme: {},
+                                font: 'Plus Jakarta Sans'
+                            };
+                            saveAll();
+                            Swal.fire({ icon: 'success', title: 'Reset complete', toast: true });
+                        }
+                    });
+                };
+
+                // Security functions
+                const changeCredentials = () => {
+                    const savedUser = localStorage.getItem('adminUser') || 'admin';
+                    const savedPass = localStorage.getItem('adminPass') || 'admin123';
+
+                    if (security.value.currentPass !== savedPass) {
+                        security.value.message = 'Current password is incorrect';
+                        security.value.messageType = 'error';
+                        return;
+                    }
+
+                    if (security.value.newPass !== security.value.confirmPass) {
+                        security.value.message = 'New passwords do not match';
+                        security.value.messageType = 'error';
+                        return;
+                    }
+
+                    if (security.value.newPass && security.value.newPass.length < 6) {
+                        security.value.message = 'Password must be at least 6 characters';
+                        security.value.messageType = 'error';
+                        return;
+                    }
+
+                    if (security.value.newUser) localStorage.setItem('adminUser', security.value.newUser);
+                    if (security.value.newPass) localStorage.setItem('adminPass', security.value.newPass);
+
+                    security.value.message = 'Credentials updated successfully';
+                    security.value.messageType = 'success';
+                    security.value.currentPass = '';
+                    security.value.newPass = '';
+                    security.value.confirmPass = '';
+
+                    setTimeout(() => {
+                        security.value.message = '';
+                    }, 3000);
+                };
+
+                const resetCredentials = () => {
+                    Swal.fire({
+                        title: 'Reset Credentials',
+                        text: 'Reset to admin / admin123?',
+                        icon: 'warning',
+                        showCancelButton: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            localStorage.setItem('adminUser', 'admin');
+                            localStorage.setItem('adminPass', 'admin123');
+                            Swal.fire({ icon: 'success', title: 'Reset complete', text: 'Username: admin, Password: admin123' });
+                        }
+                    });
+                };
+
+                // Chart initialization
+                const initChart = () => {
+                    setTimeout(() => {
+                        const ctx = document.getElementById('visitorChart');
+                        if (ctx && typeof Chart !== 'undefined') {
+                            visitorChart = new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                                    datasets: [{
+                                        label: 'Visitors',
+                                        data: [120, 150, 180, 200, 250, 300, 280],
+                                        borderColor: '#c084fc',
+                                        backgroundColor: 'rgba(192, 132, 252, 0.1)',
+                                        tension: 0.4,
+                                        fill: true
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: true,
+                                    plugins: {
+                                        legend: { labels: { color: '#94a3b8' } }
+                                    },
+                                    scales: {
+                                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
+                                        x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } }
+                                    }
+                                }
+                            });
+                        }
+                    }, 500);
+                };
+
+                const imgError = (e) => {
+                    e.target.src = 'https://placehold.co/400x400/7c3aed/ffffff?text=No+Image';
+                };
+
+                // Auto-save
+                const initAutoSave = () => {
+                    setInterval(() => {
+                        if (autoSave.value) {
+                            localStorage.setItem('bioData', JSON.stringify(data.value));
+                        }
+                    }, 30000);
+                };
+
+                // Load credentials
+                const loadCredentials = () => {
+                    const user = localStorage.getItem('adminUser');
+                    const pass = localStorage.getItem('adminPass');
+                    if (!user && !pass) {
+                        localStorage.setItem('adminUser', 'admin');
+                        localStorage.setItem('adminPass', 'admin123');
+                    }
+                };
+
+                // Lifecycle
+                onMounted(() => {
+                    loadData();
+                    loadHistory();
+                    loadThemes();
+                    initChart();
+                    initAutoSave();
+                    loadCredentials();
+                });
+
+                return {
+                    // Auth
+                    isLoggedIn,
+                    currentUser,
+                    loginUser,
+                    loginPass,
+                    showPassword,
+                    doLogin,
+                    doLogout,
+
+                    // UI
+                    sidebarOpen,
+                    currentPanel,
+                    autoSave,
+                    panelTitle,
+                    toggleSidebar,
+                    showPanel,
+
+                    // Data
+                    data,
+                    stats,
+                    historyLogs,
+
+                    // Forms
+                    newBadge,
+                    newStyleTag,
+                    newPortfolio,
+                    newPrice,
+                    newDo,
+                    newDont,
+                    newTimeline,
+                    newPayment,
+                    newGroup,
+                    newContact,
+
+                    // GAS
+                    gasUrl,
+                    connectionStatus,
+                    saveGasUrl,
+                    testConnection,
+                    syncWithGAS,
+
+                    // Security
+                    security,
+                    passwordStrength,
+                    changeCredentials,
+                    resetCredentials,
+
+                    // Theme
+                    themes,
+                    selectedTheme,
+                    selectedThemeCat,
+                    themeCategories,
+                    filteredThemes,
+                    filterThemes,
+                    selectTheme,
+                    applyTheme,
+                    resetTheme,
+
+                    // Fonts
+                    fonts,
+                    selectFont,
+
+                    // Colors
+                    colorVars,
+                    defaultColors,
+                    updateColor,
+                    getPriceColor,
+
+                    // Management functions
+                    addBadge,
+                    removeBadge,
+                    addStyleTag,
+                    removeStyleTag,
+                    addPortfolio,
+                    removePortfolio,
+                    addPrice,
+                    removePrice,
+                    addDo,
+                    removeDo,
+                    addDont,
+                    removeDont,
+                    addTimeline,
+                    removeTimeline,
+                    addPayment,
+                    removePayment,
+                    addGroup,
+                    removeGroup,
+                    fillContactPreset,
+                    addContact,
+                    removeContact,
+
+                    // Data management
+                    exportJSON,
+                    triggerImport,
+                    importJSON,
+                    confirmReset,
+                    saveAll,
+
+                    // Utilities
+                    imgError
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+
+</html>
