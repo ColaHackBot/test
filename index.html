@@ -11,6 +11,7 @@
     <meta name="theme-color" content="#c084fc">
 
     <!-- Tailwind CSS - CDN (สำหรับ development เท่านั้น) -->
+    <!-- คำเตือน: ควรใช้ Tailwind CLI หรือ PostCSS plugin ใน production -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Tailwind Config Override -->
@@ -55,8 +56,8 @@
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Vue 3 Production Build -->
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- Vue 3 Production Build (ใช้ production build เพื่อลด warning) -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
 
     <style>
         * {
