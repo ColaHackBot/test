@@ -6,56 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Bio Page | Creative Portfolio</title>
 
-    <!-- Tailwind CSS - CDN (สำหรับ development เท่านั้น) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Tailwind Config Override -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    animation: {
-                        'gradient': 'gradient 8s linear infinite',
-                        'float': 'float 6s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        gradient: {
-                            '0%, 100%': { backgroundPosition: '0% 50%' },
-                            '50%': { backgroundPosition: '100% 50%' },
-                        },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0px)' },
-                            '50%': { transform: 'translateY(-20px)' },
-                        },
-                    },
-                    backgroundSize: {
-                        '300%': '300%',
-                    }
-                }
-            }
-        }
-    </script>
-
-    <!-- Google Fonts -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&family=Inter:opsz,wght@14..32,100..900&display=swap"
-        rel="stylesheet">
-
-    <!-- Font Awesome 6 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
-    <!-- GSAP & ScrollTrigger -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <!-- Vue 3 Production Build -->
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-
+    <!-- Tailwind CSS - Production CDN (ใช้เฉพาะกรณีไม่สามารถ build ได้) -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS to supplement Tailwind -->
     <style>
-        /* CSS styles (คงเดิม) */
+        /* Additional custom styles that were in Tailwind config */
+        .animate-gradient {
+            animation: gradient 8s linear infinite;
+            background-size: 300%;
+        }
+        
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        /* Base styles */
         * {
             margin: 0;
             padding: 0;
@@ -106,15 +82,8 @@
         }
 
         @keyframes gradientShift {
-
-            0%,
-            100% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         ::-webkit-scrollbar {
@@ -167,9 +136,7 @@
         }
 
         @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
         }
 
         .price-card {
@@ -258,14 +225,8 @@
         }
 
         @media (max-width: 768px) {
-            .bento-item {
-                border-radius: 24px;
-            }
-
-            .gallery-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 0.75rem;
-            }
+            .bento-item { border-radius: 24px; }
+            .gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
         }
 
         .fade-enter-active,
@@ -289,6 +250,22 @@
             transform: scale(0.9);
         }
     </style>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Vue 3 Production Build -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
 </head>
 
 <body>
@@ -296,8 +273,7 @@
         <div class="grid-bg"></div>
 
         <transition name="fade">
-            <div v-if="loading"
-                class="fixed inset-0 bg-black/80 backdrop-blur-xl z-50 flex items-center justify-center">
+            <div v-if="loading" class="fixed inset-0 bg-black/80 backdrop-blur-xl z-50 flex items-center justify-center">
                 <div class="text-center">
                     <div class="loader mx-auto mb-4"></div>
                     <p class="text-white/80 text-sm">Loading creative universe...</p>
@@ -310,31 +286,26 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
                 <div class="md:col-span-1 bento-item p-8 text-center group">
                     <div class="relative inline-block">
-                        <div
-                            class="w-32 h-32 rounded-full mx-auto overflow-hidden ring-4 ring-purple-500/30 group-hover:ring-purple-500/50 transition-all duration-500">
-                            <img :src="data.logoUrl || defaultLogo" class="w-full h-full object-cover" alt="Avatar"
-                                @error="handleImageError">
+                        <div class="w-32 h-32 rounded-full mx-auto overflow-hidden ring-4 ring-purple-500/30 group-hover:ring-purple-500/50 transition-all duration-500">
+                            <img :src="data.logoUrl || defaultLogo" class="w-full h-full object-cover" alt="Avatar" @error="handleImageError">
                         </div>
                         <div class="absolute -top-2 -right-2 text-3xl animate-bounce">✨</div>
                     </div>
                     <h1 class="text-3xl font-bold mt-4 gradient-text">{{ data.shopName || 'Creative Studio' }}</h1>
-                    <p class="text-gray-400 text-sm mt-2">{{ data.shopDesc || 'Bringing imagination to life through
-                        digital art' }}</p>
+                    <p class="text-gray-400 text-sm mt-2">{{ data.shopDesc || 'Bringing imagination to life through digital art' }}</p>
                     <div class="flex items-center justify-center gap-2 mt-4">
                         <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
                         <span class="text-xs text-gray-400">{{ data.statusText || 'Open for Commissions' }}</span>
                     </div>
                     <div class="flex flex-wrap justify-center gap-2 mt-4">
-                        <span v-for="badge in data.badges" :key="badge"
-                            class="px-3 py-1 rounded-full text-xs font-medium bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                        <span v-for="badge in data.badges" :key="badge" class="px-3 py-1 rounded-full text-xs font-medium bg-purple-500/20 text-purple-400 border border-purple-500/30">
                             {{ badge }}
                         </span>
                     </div>
                 </div>
 
                 <div class="md:col-span-2 bento-item p-8">
-                    <h3 class="text-xl font-semibold mb-4 gradient-text">{{ data.quickActionsTitle || 'Quick Actions' }}
-                    </h3>
+                    <h3 class="text-xl font-semibold mb-4 gradient-text">{{ data.quickActionsTitle || 'Quick Actions' }}</h3>
                     <div class="grid grid-cols-2 gap-4">
                         <a :href="data.queueUrl || '#'" target="_blank" class="btn-primary-custom text-center">
                             <i class="fas fa-list-check mr-2"></i> Check Queue
@@ -360,7 +331,7 @@
                 </div>
             </div>
 
-            <!-- Portfolio Gallery - แก้ไขให้ใช้ dynamic text -->
+            <!-- Portfolio Gallery -->
             <div class="bento-item p-8 mb-8">
                 <div class="flex items-center justify-between mb-6">
                     <div>
@@ -373,8 +344,7 @@
                     <div v-for="i in 6" :key="i" class="aspect-square rounded-2xl bg-white/5 animate-pulse"></div>
                 </div>
                 <div v-else class="gallery-grid">
-                    <div v-for="(item, idx) in data.portfolio" :key="idx" class="gallery-item"
-                        @click="openImageModal(item.img)">
+                    <div v-for="(item, idx) in data.portfolio" :key="idx" class="gallery-item" @click="openImageModal(item.img)">
                         <img :src="item.img" :alt="item.name" loading="lazy" @error="handleImageError">
                     </div>
                 </div>
@@ -384,7 +354,7 @@
                 </div>
             </div>
 
-            <!-- About & Style Tags - แก้ไขให้ใช้ dynamic text -->
+            <!-- About & Style Tags -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                 <div class="bento-item p-8">
                     <div class="flex items-center gap-3 mb-4">
@@ -395,8 +365,7 @@
                     <div class="mt-6">
                         <p class="text-sm text-gray-400 mb-3">Style Tags</p>
                         <div class="flex flex-wrap gap-2">
-                            <span v-for="tag in data.styleTags" :key="tag"
-                                class="px-3 py-1 rounded-full text-xs bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                            <span v-for="tag in data.styleTags" :key="tag" class="px-3 py-1 rounded-full text-xs bg-purple-500/20 text-purple-400 border border-purple-500/30">
                                 #{{ tag }}
                             </span>
                         </div>
@@ -421,7 +390,7 @@
                 </div>
             </div>
 
-            <!-- Do & Don't - แก้ไขให้ใช้ dynamic text -->
+            <!-- Do & Don't -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                 <div class="bento-item p-8">
                     <div class="flex items-center gap-3 mb-4">
@@ -450,12 +419,11 @@
                 </div>
             </div>
 
-            <!-- Full Pricing Section - แก้ไขให้ใช้ dynamic text -->
+            <!-- Full Pricing Section -->
             <div id="pricing-section" class="bento-item p-8 mb-8">
                 <div class="flex items-center gap-3 mb-6">
                     <i class="fas fa-crown text-2xl text-yellow-400"></i>
-                    <h2 class="text-2xl font-bold gradient-text">{{ data.completePricingTitle || 'Complete Pricing' }}
-                    </h2>
+                    <h2 class="text-2xl font-bold gradient-text">{{ data.completePricingTitle || 'Complete Pricing' }}</h2>
                 </div>
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     <div v-for="item in data.prices" :key="item.name" class="price-card">
@@ -466,7 +434,7 @@
                 </div>
             </div>
 
-            <!-- How to Order - แก้ไขให้ใช้ dynamic text -->
+            <!-- How to Order -->
             <div class="bento-item p-8 mb-8">
                 <div class="flex items-center gap-3 mb-6">
                     <i class="fas fa-clipboard-list text-2xl text-purple-400"></i>
@@ -484,62 +452,52 @@
                 <div class="mt-6 pt-6 border-t border-white/10">
                     <p class="text-sm text-gray-400 mb-3">Payment Methods</p>
                     <div class="flex flex-wrap gap-3">
-                        <span v-for="payment in data.payments" :key="payment"
-                            class="px-4 py-2 rounded-full text-sm bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                        <span v-for="payment in data.payments" :key="payment" class="px-4 py-2 rounded-full text-sm bg-purple-500/20 text-purple-400 border border-purple-500/30">
                             <i :class="getPaymentIcon(payment)"></i> {{ payment }}
                         </span>
                     </div>
                 </div>
             </div>
 
-            <!-- Groups & Community - แก้ไขให้ใช้ dynamic text -->
+            <!-- Groups & Community -->
             <div class="bento-item p-8 mb-8">
                 <div class="flex items-center gap-3 mb-6">
                     <i class="fas fa-users text-2xl text-blue-400"></i>
-                    <h2 class="text-2xl font-bold gradient-text">{{ data.communityTitle || data.groupTitle ||
-                        'Community' }}</h2>
+                    <h2 class="text-2xl font-bold gradient-text">{{ data.communityTitle || data.groupTitle || 'Community' }}</h2>
                 </div>
                 <p class="text-gray-400 mb-6">{{ data.groupDesc || 'Join our creative community' }}</p>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                    <a v-for="group in data.groups" :key="group.name" :href="group.url" target="_blank"
-                        class="group relative overflow-hidden rounded-2xl">
+                    <a v-for="group in data.groups" :key="group.name" :href="group.url" target="_blank" class="group relative overflow-hidden rounded-2xl">
                         <div class="aspect-square overflow-hidden rounded-2xl">
-                            <img :src="group.img" :alt="group.name"
-                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                @error="handleImageError">
+                            <img :src="group.img" :alt="group.name" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" @error="handleImageError">
                         </div>
-                        <div
-                            class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
                             <p class="text-white text-sm font-medium">{{ group.name }}</p>
                         </div>
                     </a>
                 </div>
                 <div class="flex flex-wrap gap-3">
-                    <a v-for="btn in data.groupBtns" :key="btn.label" :href="btn.url" target="_blank"
-                        class="btn-secondary-custom text-sm">
+                    <a v-for="btn in data.groupBtns" :key="btn.label" :href="btn.url" target="_blank" class="btn-secondary-custom text-sm">
                         <i :class="btn.icon"></i> {{ btn.label }}
                     </a>
                 </div>
             </div>
 
-            <!-- Contact Section - แก้ไขให้ใช้ dynamic text -->
+            <!-- Contact Section -->
             <div class="bento-item p-8 mb-8">
                 <div class="flex items-center gap-3 mb-6">
                     <i class="fas fa-paper-plane text-2xl text-pink-400"></i>
                     <h2 class="text-2xl font-bold gradient-text">{{ data.connectTitle || 'Connect With Me' }}</h2>
                 </div>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    <a v-for="contact in data.contacts" :key="contact.label" :href="contact.url" target="_blank"
-                        class="flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all hover:scale-105"
-                        :style="{ background: contact.bg, color: contact.text }">
+                    <a v-for="contact in data.contacts" :key="contact.label" :href="contact.url" target="_blank" class="flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-medium transition-all hover:scale-105" :style="{ background: contact.bg, color: contact.text }">
                         <i :class="contact.icon"></i> {{ contact.label }}
                     </a>
                 </div>
             </div>
 
             <div class="text-center mb-8">
-                <a :href="data.viewAllUrl || '#'" target="_blank"
-                    class="inline-flex items-center gap-2 px-8 py-4 rounded-full text-sm transition-all hover:scale-105 bg-white/5 border border-white/10 text-gray-400 hover:text-purple-400 hover:border-purple-400">
+                <a :href="data.viewAllUrl || '#'" target="_blank" class="inline-flex items-center gap-2 px-8 py-4 rounded-full text-sm transition-all hover:scale-105 bg-white/5 border border-white/10 text-gray-400 hover:text-purple-400 hover:border-purple-400">
                     <i class="fas fa-arrow-up-right-from-square"></i> View All Galleries
                 </a>
             </div>
@@ -551,13 +509,10 @@
         </main>
 
         <transition name="modal">
-            <div v-if="modalImage"
-                class="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 flex items-center justify-center p-4"
-                @click="closeModal">
+            <div v-if="modalImage" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 flex items-center justify-center p-4" @click="closeModal">
                 <div class="max-w-4xl max-h-[90vh] rounded-2xl overflow-hidden" @click.stop>
                     <img :src="modalImage" class="w-full h-full object-contain" alt="Preview">
-                    <button
-                        class="absolute top-4 right-4 w-12 h-12 rounded-full bg-black/50 backdrop-blur text-white hover:bg-black/70 transition-all">
+                    <button class="absolute top-4 right-4 w-12 h-12 rounded-full bg-black/50 backdrop-blur text-white hover:bg-black/70 transition-all">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
@@ -601,7 +556,6 @@
                     groups: [],
                     groupBtns: [],
                     contacts: [],
-                    // เพิ่มฟิลด์ข้อความใหม่
                     quickActionsTitle: '',
                     portfolioTitle: '',
                     portfolioDesc: '',
@@ -673,8 +627,6 @@
                     data.value.footerText = '© 2025 All rights reserved';
                     data.value.groupTitle = 'Art Communities';
                     data.value.groupDesc = 'Join our creative community';
-
-                    // ตั้งค่า default text
                     data.value.quickActionsTitle = 'Quick Actions';
                     data.value.portfolioTitle = 'Portfolio';
                     data.value.portfolioDesc = 'Latest creative works';
@@ -697,10 +649,10 @@
                     ];
 
                     data.value.prices = [
-                        { type: 'purple', name: 'Sketch', price: '150', detail: 'Rough sketch' },
-                        { type: 'pink', name: 'Line Art', price: '250', detail: 'Clean linework' },
-                        { type: 'gold', name: 'Flat Color', price: '350', detail: 'Base colors' },
-                        { type: 'blue', name: 'Full Render', price: '800', detail: 'Full detail' }
+                        { name: 'Sketch', price: '150', detail: 'Rough sketch' },
+                        { name: 'Line Art', price: '250', detail: 'Clean linework' },
+                        { name: 'Flat Color', price: '350', detail: 'Base colors' },
+                        { name: 'Full Render', price: '800', detail: 'Full detail' }
                     ];
 
                     data.value.doList = ['Original Characters', 'Fan Art', 'Couple/BL/GL', 'Fantasy Themes'];
@@ -716,9 +668,9 @@
                     data.value.payments = ['PromptPay', 'TrueMoney', 'Bank Transfer'];
 
                     data.value.contacts = [
-                        { type: 'FB', label: 'Facebook', url: '#', icon: 'fab fa-facebook', bg: '#1877f2', text: '#fff' },
-                        { type: 'Line', label: 'Line', url: '#', icon: 'fab fa-line', bg: '#06c755', text: '#fff' },
-                        { type: 'IG', label: 'Instagram', url: '#', icon: 'fab fa-instagram', bg: 'linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)', text: '#fff' }
+                        { label: 'Facebook', url: '#', icon: 'fab fa-facebook', bg: '#1877f2', text: '#fff' },
+                        { label: 'Line', url: '#', icon: 'fab fa-line', bg: '#06c755', text: '#fff' },
+                        { label: 'Instagram', url: '#', icon: 'fab fa-instagram', bg: 'linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)', text: '#fff' }
                     ];
                 };
 
@@ -733,7 +685,9 @@
                             loading.value = false;
                             loadingPortfolio.value = false;
                             initAnimations();
-                        } catch (e) { }
+                        } catch (e) {
+                            console.error('Error parsing saved data:', e);
+                        }
                     }
 
                     const callback = 'gasCallback_' + Date.now();
@@ -784,7 +738,7 @@
                 };
 
                 const initAnimations = () => {
-                    if (typeof gsap !== 'undefined') {
+                    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
                         try {
                             gsap.registerPlugin(ScrollTrigger);
                             gsap.utils.toArray('.bento-item').forEach((item, i) => {
@@ -793,7 +747,9 @@
                                     opacity: 0, y: 50, duration: 0.6, delay: i * 0.1, ease: 'power3.out'
                                 });
                             });
-                        } catch (e) { }
+                        } catch (e) {
+                            console.error('GSAP animation error:', e);
+                        }
                     }
                 };
 
