@@ -402,7 +402,7 @@
                     <div class="px-6 py-2 text-xs text-gray-500 uppercase tracking-wider mt-4">Content</div>
                     <div class="sidebar-item" :class="{ active: currentPanel === 'header' }"
                         @click="showPanel('header')">
-                        <i class="fas fa-heading w-5"></i> Header
+                        <i class="fas fa-heading w-5"></i> Header & Text
                     </div>
                     <div class="sidebar-item" :class="{ active: currentPanel === 'portfolio' }"
                         @click="showPanel('portfolio')">
@@ -486,7 +486,7 @@
 
                 <!-- Panels -->
                 <div class="p-8">
-                    <!-- Dashboard Panel - ลบ Analytics Overview ออก -->
+                    <!-- Dashboard Panel -->
                     <div v-show="currentPanel === 'dashboard'" class="space-y-6 fade-in-up">
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                             <div class="glass-card p-6">
@@ -535,7 +535,7 @@
                         </div>
                     </div>
 
-                    <!-- Header Panel -->
+                    <!-- Header & Text Panel -->
                     <div v-show="currentPanel === 'header'" class="space-y-6 fade-in-up">
                         <div class="glass-card p-6">
                             <h3 class="font-semibold mb-6 gradient-text">General Information</h3>
@@ -599,10 +599,71 @@
                                     <input type="text" v-model="data.groupDesc" class="form-input"
                                         placeholder="Join our community">
                                 </div>
-                                <div>
+                                <div class="md:col-span-2">
                                     <label class="form-label">About Text</label>
                                     <textarea v-model="data.aboutText" class="form-textarea" rows="3"
                                         placeholder="About your studio..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-6">
+                            <h3 class="font-semibold mb-4 gradient-text">Section Titles & Text</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="form-label">Quick Actions Title</label>
+                                    <input type="text" v-model="data.quickActionsTitle" class="form-input"
+                                        placeholder="Quick Actions">
+                                </div>
+                                <div>
+                                    <label class="form-label">Portfolio Title</label>
+                                    <input type="text" v-model="data.portfolioTitle" class="form-input"
+                                        placeholder="Portfolio">
+                                </div>
+                                <div>
+                                    <label class="form-label">Portfolio Description</label>
+                                    <input type="text" v-model="data.portfolioDesc" class="form-input"
+                                        placeholder="Latest creative works">
+                                </div>
+                                <div>
+                                    <label class="form-label">About Title</label>
+                                    <input type="text" v-model="data.aboutTitle" class="form-input"
+                                        placeholder="About Studio">
+                                </div>
+                                <div>
+                                    <label class="form-label">Pricing Title</label>
+                                    <input type="text" v-model="data.pricingTitle" class="form-input"
+                                        placeholder="Pricing">
+                                </div>
+                                <div>
+                                    <label class="form-label">What I Do Title</label>
+                                    <input type="text" v-model="data.doTitle" class="form-input"
+                                        placeholder="What I Do">
+                                </div>
+                                <div>
+                                    <label class="form-label">What I Don't Title</label>
+                                    <input type="text" v-model="data.dontTitle" class="form-input"
+                                        placeholder="What I Don't">
+                                </div>
+                                <div>
+                                    <label class="form-label">Complete Pricing Title</label>
+                                    <input type="text" v-model="data.completePricingTitle" class="form-input"
+                                        placeholder="Complete Pricing">
+                                </div>
+                                <div>
+                                    <label class="form-label">How to Order Title</label>
+                                    <input type="text" v-model="data.howToOrderTitle" class="form-input"
+                                        placeholder="How to Order">
+                                </div>
+                                <div>
+                                    <label class="form-label">Community Title</label>
+                                    <input type="text" v-model="data.communityTitle" class="form-input"
+                                        placeholder="Community">
+                                </div>
+                                <div>
+                                    <label class="form-label">Connect Title</label>
+                                    <input type="text" v-model="data.connectTitle" class="form-input"
+                                        placeholder="Connect With Me">
                                 </div>
                             </div>
                         </div>
@@ -642,7 +703,7 @@
                         </div>
                     </div>
 
-                    <!-- Portfolio Panel - แก้ไขให้แสดงรูปได้ -->
+                    <!-- Portfolio Panel -->
                     <div v-show="currentPanel === 'portfolio'" class="space-y-6 fade-in-up">
                         <div class="glass-card p-6">
                             <h3 class="font-semibold mb-6 gradient-text">Add New Artwork</h3>
@@ -743,7 +804,7 @@
                                     <div class="w-12 h-12 rounded-full mb-2"
                                         :style="{ background: getPriceColor(item.type) }"></div>
                                     <p class="font-semibold">{{ item.name }}</p>
-                                    <p class="text-xl font-bold gradient-text">฿{{ item.price }}</p>
+                                    <p class="text-xl font-bold gradient-text">{{ formatPrice(item.price) }}</p>
                                     <p class="text-xs text-gray-500">{{ item.detail }}</p>
                                     <button class="text-red-400 text-sm mt-2" @click="removePrice(idx)">Remove</button>
                                 </div>
@@ -954,7 +1015,7 @@
                                 <input type="text" v-model="gasUrl" class="form-input"
                                     placeholder="https://script.google.com/macros/s/...">
                                 <p class="text-xs text-gray-500 mt-1">URL:
-                                    https://script.google.com/macros/s/AKfycbwI0z4r65uZj_JaXgm6X97R-6CFRLENZKGw1L2m-B2nYegQR9i5lxBnJmJTSbjIIcsJ/exec
+                                    https://script.google.com/macros/s/AKfycbzvIPWec8yBxqGOcNUYDcyMNfQ2CZQpp-AF-m_2yIzdxrZ2PEiwy7bg7DtlHKj7mSyB/exec
                                 </p>
                             </div>
                             <div class="flex gap-3">
@@ -1080,7 +1141,19 @@
                     groupBtns: [],
                     contacts: [],
                     theme: {},
-                    font: 'Plus Jakarta Sans'
+                    font: 'Plus Jakarta Sans',
+                    // Section Titles
+                    quickActionsTitle: '',
+                    portfolioTitle: '',
+                    portfolioDesc: '',
+                    aboutTitle: '',
+                    pricingTitle: '',
+                    doTitle: '',
+                    dontTitle: '',
+                    completePricingTitle: '',
+                    howToOrderTitle: '',
+                    communityTitle: '',
+                    connectTitle: ''
                 });
 
                 // Form models
@@ -1151,7 +1224,7 @@
                 const panelTitle = computed(() => {
                     const titles = {
                         dashboard: 'Dashboard',
-                        header: 'Header Settings',
+                        header: 'Header & Text Settings',
                         portfolio: 'Portfolio Manager',
                         prices: 'Pricing Manager',
                         dodont: 'Do & Don\'t',
@@ -1191,6 +1264,16 @@
                     ];
                     return levels[Math.min(strength, 4)];
                 });
+
+                const formatPrice = (price) => {
+                    if (!price) return 'POA';
+                    return price.toString().includes('POA') ? 'POA' : '฿' + price;
+                };
+
+                const getPriceColor = (type) => {
+                    const colors = { purple: '#c084fc', pink: '#f472b6', gold: '#fbbf24', silver: '#94a3b8', blue: '#60a5fa', green: '#4ade80' };
+                    return colors[type] || '#c084fc';
+                };
 
                 // Methods
                 const loadData = () => {
@@ -1542,13 +1625,13 @@
 
                 const imgError = (e) => {
                     console.log('Image failed to load:', e.target.src);
-                    e.target.src = 'https://placehold.co/400x400/7c3aed/ffffff?text=Image+Not+Found';
+                    e.target.src = 'https://via.placeholder.com/400x400/7c3aed/ffffff?text=Image+Not+Found';
                     e.target.onerror = null;
                 };
 
                 const testImageError = (e) => {
                     console.log('Test image failed:', e.target.src);
-                    e.target.src = 'https://placehold.co/100x100/7c3aed/ffffff?text=Invalid+URL';
+                    e.target.src = 'https://via.placeholder.com/100x100/7c3aed/ffffff?text=Invalid+URL';
                 };
 
                 // Price management
@@ -1566,11 +1649,6 @@
                 const removePrice = (idx) => {
                     data.value.prices.splice(idx, 1);
                     saveAll();
-                };
-
-                const getPriceColor = (type) => {
-                    const colors = { purple: '#c084fc', pink: '#f472b6', gold: '#fbbf24', silver: '#94a3b8', blue: '#60a5fa', green: '#4ade80' };
-                    return colors[type] || '#c084fc';
                 };
 
                 // Do/Dont management
@@ -1853,7 +1931,18 @@
                                 groupBtns: [],
                                 contacts: [],
                                 theme: {},
-                                font: 'Plus Jakarta Sans'
+                                font: 'Plus Jakarta Sans',
+                                quickActionsTitle: '',
+                                portfolioTitle: '',
+                                portfolioDesc: '',
+                                aboutTitle: '',
+                                pricingTitle: '',
+                                doTitle: '',
+                                dontTitle: '',
+                                completePricingTitle: '',
+                                howToOrderTitle: '',
+                                communityTitle: '',
+                                connectTitle: ''
                             };
                             saveAll();
                             Swal.fire({ icon: 'success', title: 'Reset complete', toast: true });
@@ -1923,12 +2012,28 @@
                     }
                 };
 
+                // Load default text titles
+                const loadDefaultTitles = () => {
+                    if (!data.value.quickActionsTitle) data.value.quickActionsTitle = 'Quick Actions';
+                    if (!data.value.portfolioTitle) data.value.portfolioTitle = 'Portfolio';
+                    if (!data.value.portfolioDesc) data.value.portfolioDesc = 'Latest creative works';
+                    if (!data.value.aboutTitle) data.value.aboutTitle = 'About Studio';
+                    if (!data.value.pricingTitle) data.value.pricingTitle = 'Pricing';
+                    if (!data.value.doTitle) data.value.doTitle = 'What I Do';
+                    if (!data.value.dontTitle) data.value.dontTitle = 'What I Don\'t';
+                    if (!data.value.completePricingTitle) data.value.completePricingTitle = 'Complete Pricing';
+                    if (!data.value.howToOrderTitle) data.value.howToOrderTitle = 'How to Order';
+                    if (!data.value.communityTitle) data.value.communityTitle = 'Community';
+                    if (!data.value.connectTitle) data.value.connectTitle = 'Connect With Me';
+                };
+
                 // Lifecycle
                 onMounted(() => {
                     loadData();
                     loadHistory();
                     loadThemes();
                     loadCredentials();
+                    loadDefaultTitles();
                 });
 
                 return {
@@ -1998,6 +2103,7 @@
                     defaultColors,
                     updateColor,
                     getPriceColor,
+                    formatPrice,
 
                     // Management functions
                     addBadge,
