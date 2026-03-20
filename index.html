@@ -39,7 +39,6 @@
             overflow-x: hidden;
         }
 
-        /* Dynamic Gradient Background */
         .dynamic-bg {
             position: fixed;
             inset: 0;
@@ -49,12 +48,10 @@
             z-index: 0;
         }
 
-        /* Animated Grid */
         .grid-bg-3d {
             position: fixed;
             inset: 0;
-            background-image:
-                linear-gradient(rgba(192, 132, 252, 0.05) 1px, transparent 1px),
+            background-image: linear-gradient(rgba(192, 132, 252, 0.05) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(192, 132, 252, 0.05) 1px, transparent 1px);
             background-size: 60px 60px;
             pointer-events: none;
@@ -64,16 +61,10 @@
         }
 
         @keyframes gridMove {
-            0% {
-                transform: translateZ(0) rotateX(0deg);
-            }
-
-            100% {
-                transform: translateZ(100px) rotateX(2deg);
-            }
+            0% { transform: translateZ(0) rotateX(0deg); }
+            100% { transform: translateZ(100px) rotateX(2deg); }
         }
 
-        /* Floating Orbs */
         .floating-orb {
             position: fixed;
             border-radius: 50%;
@@ -85,28 +76,9 @@
         }
 
         @keyframes floatOrb {
-
-            0%,
-            100% {
-                transform: translate(0, 0) scale(1);
-            }
-
-            33% {
-                transform: translate(100px, -50px) scale(1.2);
-            }
-
-            66% {
-                transform: translate(-50px, 100px) scale(0.8);
-            }
-        }
-
-        /* Glassmorphism Ultra */
-        .glass-ultra {
-            background: rgba(20, 20, 35, 0.4);
-            backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 32px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(100px, -50px) scale(1.2); }
+            66% { transform: translate(-50px, 100px) scale(0.8); }
         }
 
         .bento-3d {
@@ -140,7 +112,6 @@
             box-shadow: 0 20px 40px rgba(192, 132, 252, 0.3), 0 0 0 1px rgba(192, 132, 252, 0.2);
         }
 
-        /* Gradient Text with Animation */
         .gradient-text-animated {
             background: linear-gradient(135deg, #c084fc, #f472b6, #60a5fa, #c084fc);
             background-size: 300% 300%;
@@ -151,48 +122,10 @@
         }
 
         @keyframes gradientFlow {
-
-            0%,
-            100% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
-        /* Glow Effect */
-        .glow-on-hover {
-            transition: all 0.3s ease;
-        }
-
-        .glow-on-hover:hover {
-            box-shadow: 0 0 20px rgba(192, 132, 252, 0.6);
-            text-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: rgba(20, 20, 35, 0.8);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, var(--secondary), var(--primary));
-        }
-
-        /* Gallery Grid 3D */
         .gallery-grid-3d {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -239,7 +172,6 @@
             opacity: 1;
         }
 
-        /* Price Card Modern */
         .price-card-modern {
             background: linear-gradient(135deg, rgba(192, 132, 252, 0.1), rgba(244, 114, 182, 0.05));
             border: 1px solid rgba(192, 132, 252, 0.2);
@@ -275,7 +207,6 @@
             box-shadow: 0 15px 35px rgba(192, 132, 252, 0.2);
         }
 
-        /* Timeline Modern */
         .timeline-modern {
             display: flex;
             gap: 1.5rem;
@@ -312,7 +243,6 @@
             box-shadow: 0 0 20px var(--primary-glow);
         }
 
-        /* Buttons Modern */
         .btn-primary-modern {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             border: none;
@@ -366,7 +296,6 @@
             box-shadow: 0 5px 20px rgba(192, 132, 252, 0.3);
         }
 
-        /* Loading Animation */
         .loader-3d {
             width: 60px;
             height: 60px;
@@ -378,60 +307,30 @@
         }
 
         @keyframes spin3d {
-            0% {
-                transform: rotate(0deg) scale(1);
-            }
-
-            50% {
-                transform: rotate(180deg) scale(1.1);
-            }
-
-            100% {
-                transform: rotate(360deg) scale(1);
-            }
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
         }
 
-        /* Modal Modern */
         .modal-modern {
             backdrop-filter: blur(30px);
             background: rgba(0, 0, 0, 0.8);
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
-            .bento-3d {
-                border-radius: 24px;
-            }
-
-            .gallery-grid-3d {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1rem;
-            }
+            .bento-3d { border-radius: 24px; }
+            .gallery-grid-3d { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
         }
 
-        /* Animations */
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .fade-in-up {
             animation: fadeInUp 0.6s ease forwards;
         }
 
-        .stagger-item {
-            opacity: 0;
-            animation: fadeInUp 0.6s ease forwards;
-        }
-
-        /* Hover Effects */
         .hover-lift {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
@@ -441,7 +340,6 @@
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
         }
 
-        /* Typography */
         .font-display {
             font-family: 'Syne', sans-serif;
         }
@@ -462,28 +360,20 @@
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Vue 3 (production build) -->
-    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
 <body>
     <div id="app">
-        <!-- Dynamic Background Elements -->
         <div class="dynamic-bg"></div>
         <div class="grid-bg-3d"></div>
-        <div class="floating-orb"
-            style="width: 300px; height: 300px; background: radial-gradient(circle, rgba(192,132,252,0.3), transparent); top: -100px; left: -100px;">
-        </div>
-        <div class="floating-orb"
-            style="width: 400px; height: 400px; background: radial-gradient(circle, rgba(244,114,182,0.3), transparent); bottom: -150px; right: -150px; animation-delay: -5s;">
-        </div>
-        <div class="floating-orb"
-            style="width: 250px; height: 250px; background: radial-gradient(circle, rgba(96,165,250,0.2), transparent); top: 50%; right: 20%; animation-delay: -10s;">
-        </div>
+        <div class="floating-orb" style="width: 300px; height: 300px; background: radial-gradient(circle, rgba(192,132,252,0.3), transparent); top: -100px; left: -100px;"></div>
+        <div class="floating-orb" style="width: 400px; height: 400px; background: radial-gradient(circle, rgba(244,114,182,0.3), transparent); bottom: -150px; right: -150px; animation-delay: -5s;"></div>
+        <div class="floating-orb" style="width: 250px; height: 250px; background: radial-gradient(circle, rgba(96,165,250,0.2), transparent); top: 50%; right: 20%; animation-delay: -10s;"></div>
 
         <transition name="fade">
-            <div v-if="loading"
-                class="fixed inset-0 bg-black/90 backdrop-blur-2xl z-50 flex items-center justify-center">
+            <div v-if="loading" class="fixed inset-0 bg-black/90 backdrop-blur-2xl z-50 flex items-center justify-center">
                 <div class="text-center">
                     <div class="loader-3d mx-auto mb-6"></div>
                     <p class="text-white/60 text-sm tracking-wider">LOADING CREATIVE UNIVERSE</p>
@@ -497,320 +387,136 @@
         </transition>
 
         <main class="relative z-10 max-w-7xl mx-auto px-6 py-16 md:py-24">
-            <!-- Hero Section Modern -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
                 <div class="lg:col-span-1 bento-3d p-8 text-center group fade-in-up" style="animation-delay: 0.1s">
                     <div class="relative inline-block">
-                        <div
-                            class="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 blur-xl opacity-50 group-hover:opacity-75 transition-opacity">
-                        </div>
-                        <div
-                            class="relative w-36 h-36 rounded-full mx-auto overflow-hidden ring-4 ring-purple-500/50 group-hover:ring-purple-500 transition-all duration-500">
-                            <img :src="data.logoUrl || defaultLogo" class="w-full h-full object-cover" alt="Avatar"
-                                @error="handleImageError">
+                        <div class="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+                        <div class="relative w-36 h-36 rounded-full mx-auto overflow-hidden ring-4 ring-purple-500/50 group-hover:ring-purple-500 transition-all duration-500">
+                            <img :src="data.logoUrl || defaultLogo" class="w-full h-full object-cover" alt="Avatar" @error="handleImageError">
                         </div>
                         <div class="absolute -top-2 -right-2 text-3xl animate-bounce">✨</div>
                     </div>
-                    <h1 class="text-4xl font-bold mt-6 gradient-text-animated font-display">{{ data.shopName ||
-                        'Creative Studio' }}</h1>
-                    <p class="text-gray-400 text-sm mt-3 font-body">{{ data.shopDesc || 'Bringing imagination to life
-                        through digital art' }}</p>
+                    <h1 class="text-4xl font-bold mt-6 gradient-text-animated font-display">{{ data.shopName || 'Creative Studio' }}</h1>
+                    <p class="text-gray-400 text-sm mt-3 font-body">{{ data.shopDesc || 'Bringing imagination to life through digital art' }}</p>
                     <div class="flex items-center justify-center gap-2 mt-5">
                         <div class="relative">
                             <div class="w-3 h-3 rounded-full bg-green-400 animate-pulse"></div>
-                            <div class="absolute inset-0 w-3 h-3 rounded-full bg-green-400 animate-ping opacity-75">
-                            </div>
+                            <div class="absolute inset-0 w-3 h-3 rounded-full bg-green-400 animate-ping opacity-75"></div>
                         </div>
                         <span class="text-xs text-gray-400">{{ data.statusText || 'Open for Commissions' }}</span>
                     </div>
                     <div class="flex flex-wrap justify-center gap-2 mt-5">
-                        <span v-for="badge in data.badges" :key="badge"
-                            class="px-3 py-1.5 rounded-full text-xs font-medium bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-400 border border-purple-500/30 backdrop-blur-sm">
-                            {{ badge }}
-                        </span>
+                        <span v-for="badge in data.badges" :key="badge" class="px-3 py-1.5 rounded-full text-xs font-medium bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-400 border border-purple-500/30 backdrop-blur-sm">{{ badge }}</span>
                     </div>
                 </div>
 
                 <div class="lg:col-span-2 bento-3d p-8 fade-in-up" style="animation-delay: 0.2s">
-                    <h3 class="text-2xl font-semibold mb-6 gradient-text-animated font-display">{{
-                        data.quickActionsTitle || 'Quick Actions' }}</h3>
+                    <h3 class="text-2xl font-semibold mb-6 gradient-text-animated font-display">{{ data.quickActionsTitle || 'Quick Actions' }}</h3>
                     <div class="grid grid-cols-2 gap-5">
-                        <a :href="data.queueUrl || '#'" target="_blank" class="btn-primary-modern text-center group">
-                            <i class="fas fa-list-check mr-2 group-hover:rotate-12 transition-transform"></i> Check
-                            Queue
-                        </a>
-                        <a :href="data.detailUrl || '#'" target="_blank" class="btn-secondary-modern text-center group">
-                            <i class="fas fa-image mr-2 group-hover:scale-110 transition-transform"></i> Portfolio
-                            Detail
-                        </a>
+                        <a :href="data.queueUrl || '#'" target="_blank" class="btn-primary-modern text-center group"><i class="fas fa-list-check mr-2 group-hover:rotate-12 transition-transform"></i> Check Queue</a>
+                        <a :href="data.detailUrl || '#'" target="_blank" class="btn-secondary-modern text-center group"><i class="fas fa-image mr-2 group-hover:scale-110 transition-transform"></i> Portfolio Detail</a>
                     </div>
                     <div class="grid grid-cols-3 gap-6 mt-8 pt-8 border-t border-white/10">
                         <div class="text-center group cursor-pointer" @click="scrollToPortfolio">
                             <p class="text-3xl font-bold gradient-text-animated">{{ (data.portfolio || []).length }}</p>
-                            <p class="text-xs text-gray-500 mt-1 group-hover:text-purple-400 transition-colors">Artworks
-                            </p>
+                            <p class="text-xs text-gray-500 mt-1 group-hover:text-purple-400 transition-colors">Artworks</p>
                         </div>
                         <div class="text-center group cursor-pointer" @click="scrollToPrices">
                             <p class="text-3xl font-bold gradient-text-animated">{{ (data.prices || []).length }}</p>
-                            <p class="text-xs text-gray-500 mt-1 group-hover:text-purple-400 transition-colors">Packages
-                            </p>
+                            <p class="text-xs text-gray-500 mt-1 group-hover:text-purple-400 transition-colors">Packages</p>
                         </div>
                         <div class="text-center group cursor-pointer" @click="scrollToContacts">
                             <p class="text-3xl font-bold gradient-text-animated">{{ (data.contacts || []).length }}</p>
-                            <p class="text-xs text-gray-500 mt-1 group-hover:text-purple-400 transition-colors">Contacts
-                            </p>
+                            <p class="text-xs text-gray-500 mt-1 group-hover:text-purple-400 transition-colors">Contacts</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Portfolio Gallery Modern -->
             <div id="portfolio-section" class="bento-3d p-8 mb-12 fade-in-up" style="animation-delay: 0.3s">
                 <div class="flex items-center justify-between mb-8">
                     <div>
-                        <h2 class="text-3xl font-bold gradient-text-animated font-display">{{ data.portfolioTitle ||
-                            'Portfolio' }}</h2>
+                        <h2 class="text-3xl font-bold gradient-text-animated font-display">{{ data.portfolioTitle || 'Portfolio' }}</h2>
                         <p class="text-gray-500 text-sm mt-2">{{ data.portfolioDesc || 'Latest creative works' }}</p>
                     </div>
                     <i class="fas fa-sparkle text-4xl text-purple-500/50 animate-pulse"></i>
                 </div>
                 <div v-if="loadingPortfolio" class="grid grid-cols-2 md:grid-cols-4 gap-5">
-                    <div v-for="i in 6" :key="i"
-                        class="aspect-square rounded-2xl bg-gradient-to-br from-white/5 to-white/10 animate-pulse">
-                    </div>
+                    <div v-for="i in 6" :key="i" class="aspect-square rounded-2xl bg-gradient-to-br from-white/5 to-white/10 animate-pulse"></div>
                 </div>
                 <div v-else class="gallery-grid-3d">
-                    <div v-for="(item, idx) in data.portfolio" :key="idx" class="gallery-item-3d"
-                        @click="openImageModal(item.img)">
+                    <div v-for="(item, idx) in data.portfolio" :key="idx" class="gallery-item-3d" @click="openImageModal(item.img)">
                         <img :src="item.img" :alt="item.name" loading="lazy" @error="handleImageError">
-                        <div
-                            class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 hover:opacity-100 transition-opacity flex items-end p-4">
-                            <p class="text-white text-sm font-medium">{{ item.name }}</p>
-                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 hover:opacity-100 transition-opacity flex items-end p-4"><p class="text-white text-sm font-medium">{{ item.name }}</p></div>
                     </div>
                 </div>
-                <div v-if="!data.portfolio || data.portfolio.length === 0" class="text-center py-16">
-                    <i class="fas fa-images text-5xl text-gray-600 mb-4"></i>
-                    <p class="text-gray-500">No artworks yet. Add some in admin panel!</p>
-                </div>
+                <div v-if="!data.portfolio || data.portfolio.length === 0" class="text-center py-16"><i class="fas fa-images text-5xl text-gray-600 mb-4"></i><p class="text-gray-500">No artworks yet. Add some in admin panel!</p></div>
             </div>
 
-            <!-- About & Style Tags -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
                 <div class="bento-3d p-8 fade-in-up" style="animation-delay: 0.4s">
-                    <div class="flex items-center gap-4 mb-6">
-                        <div
-                            class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
-                            <i class="fas fa-store text-xl text-white"></i>
-                        </div>
-                        <h2 class="text-2xl font-bold gradient-text-animated">{{ data.aboutTitle || 'About Studio' }}
-                        </h2>
-                    </div>
+                    <div class="flex items-center gap-4 mb-6"><div class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center"><i class="fas fa-store text-xl text-white"></i></div><h2 class="text-2xl font-bold gradient-text-animated">{{ data.aboutTitle || 'About Studio' }}</h2></div>
                     <p class="text-gray-300 leading-relaxed font-body">{{ data.aboutText || aboutText }}</p>
-                    <div class="mt-8">
-                        <p class="text-sm text-gray-400 mb-4 font-semibold">Style Tags</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span v-for="tag in data.styleTags" :key="tag"
-                                class="px-3 py-1.5 rounded-full text-xs bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-400 border border-purple-500/30 hover:scale-105 transition-transform cursor-pointer">
-                                #{{ tag }}
-                            </span>
-                        </div>
-                    </div>
+                    <div class="mt-8"><p class="text-sm text-gray-400 mb-4 font-semibold">Style Tags</p><div class="flex flex-wrap gap-2"><span v-for="tag in data.styleTags" :key="tag" class="px-3 py-1.5 rounded-full text-xs bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-400 border border-purple-500/30 hover:scale-105 transition-transform cursor-pointer">#{{ tag }}</span></div></div>
                 </div>
 
                 <div class="bento-3d p-8 fade-in-up" style="animation-delay: 0.5s">
-                    <div class="flex items-center gap-4 mb-6">
-                        <div
-                            class="w-12 h-12 rounded-full bg-gradient-to-r from-pink-500 to-orange-500 flex items-center justify-center">
-                            <i class="fas fa-tags text-xl text-white"></i>
-                        </div>
-                        <h2 class="text-2xl font-bold gradient-text-animated">{{ data.pricingTitle || 'Pricing' }}</h2>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div v-for="item in (data.prices || []).slice(0, 4)" :key="item.name"
-                            class="price-card-modern p-4">
-                            <p class="text-xs text-gray-400 mb-2">{{ item.name }}</p>
-                            <p class="text-2xl font-bold gradient-text-animated">{{ formatPrice(item.price) }}</p>
-                            <p class="text-xs text-gray-500 mt-2">{{ item.detail }}</p>
-                        </div>
-                    </div>
-                    <button class="btn-secondary-modern w-full mt-6 text-sm justify-center" @click="scrollToPrices">
-                        View All Packages <i
-                            class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-                    </button>
+                    <div class="flex items-center gap-4 mb-6"><div class="w-12 h-12 rounded-full bg-gradient-to-r from-pink-500 to-orange-500 flex items-center justify-center"><i class="fas fa-tags text-xl text-white"></i></div><h2 class="text-2xl font-bold gradient-text-animated">{{ data.pricingTitle || 'Pricing' }}</h2></div>
+                    <div class="grid grid-cols-2 gap-4"><div v-for="item in (data.prices || []).slice(0, 4)" :key="item.name" class="price-card-modern p-4"><p class="text-xs text-gray-400 mb-2">{{ item.name }}</p><p class="text-2xl font-bold gradient-text-animated">{{ formatPrice(item.price) }}</p><p class="text-xs text-gray-500 mt-2">{{ item.detail }}</p></div></div>
+                    <button class="btn-secondary-modern w-full mt-6 text-sm justify-center" @click="scrollToPrices">View All Packages <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i></button>
                 </div>
             </div>
 
-            <!-- Do & Don't Modern -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
                 <div class="bento-3d p-8 fade-in-up" style="animation-delay: 0.6s">
-                    <div class="flex items-center gap-4 mb-6">
-                        <div
-                            class="w-12 h-12 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 flex items-center justify-center">
-                            <i class="fas fa-check-circle text-xl text-white"></i>
-                        </div>
-                        <h2 class="text-2xl font-bold gradient-text-animated">{{ data.doTitle || 'What I Do' }}</h2>
-                    </div>
-                    <ul class="space-y-3">
-                        <li v-for="item in data.doList" :key="item"
-                            class="flex items-start gap-3 group hover:translate-x-2 transition-transform">
-                            <i class="fas fa-check text-green-400 mt-1 group-hover:scale-110 transition-transform"></i>
-                            <span class="text-gray-300">{{ item }}</span>
-                        </li>
-                    </ul>
+                    <div class="flex items-center gap-4 mb-6"><div class="w-12 h-12 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 flex items-center justify-center"><i class="fas fa-check-circle text-xl text-white"></i></div><h2 class="text-2xl font-bold gradient-text-animated">{{ data.doTitle || 'What I Do' }}</h2></div>
+                    <ul class="space-y-3"><li v-for="item in data.doList" :key="item" class="flex items-start gap-3 group hover:translate-x-2 transition-transform"><i class="fas fa-check text-green-400 mt-1 group-hover:scale-110 transition-transform"></i><span class="text-gray-300">{{ item }}</span></li></ul>
                 </div>
 
                 <div class="bento-3d p-8 fade-in-up" style="animation-delay: 0.7s">
-                    <div class="flex items-center gap-4 mb-6">
-                        <div
-                            class="w-12 h-12 rounded-full bg-gradient-to-r from-red-500 to-orange-500 flex items-center justify-center">
-                            <i class="fas fa-times-circle text-xl text-white"></i>
-                        </div>
-                        <h2 class="text-2xl font-bold gradient-text-animated">{{ data.dontTitle || 'What I Don\'t' }}
-                        </h2>
-                    </div>
-                    <ul class="space-y-3">
-                        <li v-for="item in data.dontList" :key="item"
-                            class="flex items-start gap-3 group hover:translate-x-2 transition-transform">
-                            <i class="fas fa-times text-red-400 mt-1 group-hover:scale-110 transition-transform"></i>
-                            <span class="text-gray-300">{{ item }}</span>
-                        </li>
-                    </ul>
+                    <div class="flex items-center gap-4 mb-6"><div class="w-12 h-12 rounded-full bg-gradient-to-r from-red-500 to-orange-500 flex items-center justify-center"><i class="fas fa-times-circle text-xl text-white"></i></div><h2 class="text-2xl font-bold gradient-text-animated">{{ data.dontTitle || 'What I Don\'t' }}</h2></div>
+                    <ul class="space-y-3"><li v-for="item in data.dontList" :key="item" class="flex items-start gap-3 group hover:translate-x-2 transition-transform"><i class="fas fa-times text-red-400 mt-1 group-hover:scale-110 transition-transform"></i><span class="text-gray-300">{{ item }}</span></li></ul>
                 </div>
             </div>
 
-            <!-- Full Pricing Section -->
             <div id="pricing-section" class="bento-3d p-8 mb-12 fade-in-up" style="animation-delay: 0.8s">
-                <div class="flex items-center gap-4 mb-8">
-                    <div
-                        class="w-12 h-12 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 flex items-center justify-center">
-                        <i class="fas fa-crown text-xl text-white"></i>
-                    </div>
-                    <h2 class="text-2xl font-bold gradient-text-animated">{{ data.completePricingTitle || 'Complete
-                        Pricing' }}</h2>
-                </div>
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                    <div v-for="item in data.prices" :key="item.name" class="price-card-modern">
-                        <div class="w-12 h-12 rounded-full mx-auto mb-3"
-                            :style="{ background: getPriceColor(item.type) }"></div>
-                        <p class="text-sm text-gray-400 mb-2">{{ item.name }}</p>
-                        <p class="text-2xl font-bold gradient-text-animated">{{ formatPrice(item.price) }}</p>
-                        <p class="text-xs text-gray-500 mt-2">{{ item.detail }}</p>
-                    </div>
-                </div>
+                <div class="flex items-center gap-4 mb-8"><div class="w-12 h-12 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 flex items-center justify-center"><i class="fas fa-crown text-xl text-white"></i></div><h2 class="text-2xl font-bold gradient-text-animated">{{ data.completePricingTitle || 'Complete Pricing' }}</h2></div>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5"><div v-for="item in data.prices" :key="item.name" class="price-card-modern"><div class="w-12 h-12 rounded-full mx-auto mb-3" :style="{ background: getPriceColor(item.type) }"></div><p class="text-sm text-gray-400 mb-2">{{ item.name }}</p><p class="text-2xl font-bold gradient-text-animated">{{ formatPrice(item.price) }}</p><p class="text-xs text-gray-500 mt-2">{{ item.detail }}</p></div></div>
             </div>
 
-            <!-- How to Order Modern -->
             <div class="bento-3d p-8 mb-12 fade-in-up" style="animation-delay: 0.9s">
-                <div class="flex items-center gap-4 mb-8">
-                    <div
-                        class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center">
-                        <i class="fas fa-clipboard-list text-xl text-white"></i>
-                    </div>
-                    <h2 class="text-2xl font-bold gradient-text-animated">{{ data.howToOrderTitle || 'How to Order' }}
-                    </h2>
-                </div>
-                <div class="space-y-8">
-                    <div v-for="step in data.timeline" :key="step.step" class="timeline-modern">
-                        <div class="timeline-dot-modern">{{ step.step }}</div>
-                        <div class="flex-1 pb-8">
-                            <p class="font-medium text-white text-lg">{{ step.text }}</p>
-                            <p class="text-xs text-gray-500 mt-2">{{ getSpeedText(step.speed) }}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-8 pt-8 border-t border-white/10">
-                    <p class="text-sm text-gray-400 mb-4 font-semibold">Payment Methods</p>
-                    <div class="flex flex-wrap gap-3">
-                        <span v-for="payment in data.payments" :key="payment"
-                            class="px-4 py-2 rounded-full text-sm bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-400 border border-purple-500/30 hover:scale-105 transition-transform cursor-pointer">
-                            <i :class="getPaymentIcon(payment)"></i> {{ payment }}
-                        </span>
-                    </div>
-                </div>
+                <div class="flex items-center gap-4 mb-8"><div class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center"><i class="fas fa-clipboard-list text-xl text-white"></i></div><h2 class="text-2xl font-bold gradient-text-animated">{{ data.howToOrderTitle || 'How to Order' }}</h2></div>
+                <div class="space-y-8"><div v-for="step in data.timeline" :key="step.step" class="timeline-modern"><div class="timeline-dot-modern">{{ step.step }}</div><div class="flex-1 pb-8"><p class="font-medium text-white text-lg">{{ step.text }}</p><p class="text-xs text-gray-500 mt-2">{{ getSpeedText(step.speed) }}</p></div></div></div>
+                <div class="mt-8 pt-8 border-t border-white/10"><p class="text-sm text-gray-400 mb-4 font-semibold">Payment Methods</p><div class="flex flex-wrap gap-3"><span v-for="payment in data.payments" :key="payment" class="px-4 py-2 rounded-full text-sm bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-400 border border-purple-500/30 hover:scale-105 transition-transform cursor-pointer"><i :class="getPaymentIcon(payment)"></i> {{ payment }}</span></div></div>
             </div>
 
-            <!-- Groups & Community Modern -->
             <div class="bento-3d p-8 mb-12 fade-in-up" style="animation-delay: 1s">
-                <div class="flex items-center gap-4 mb-8">
-                    <div
-                        class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center">
-                        <i class="fas fa-users text-xl text-white"></i>
-                    </div>
-                    <h2 class="text-2xl font-bold gradient-text-animated">{{ data.communityTitle || data.groupTitle ||
-                        'Community' }}</h2>
-                </div>
+                <div class="flex items-center gap-4 mb-8"><div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center"><i class="fas fa-users text-xl text-white"></i></div><h2 class="text-2xl font-bold gradient-text-animated">{{ data.communityTitle || data.groupTitle || 'Community' }}</h2></div>
                 <p class="text-gray-400 mb-8 font-body">{{ data.groupDesc || 'Join our creative community' }}</p>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-5 mb-8">
-                    <a v-for="group in data.groups" :key="group.name" :href="group.url" target="_blank"
-                        class="group relative overflow-hidden rounded-2xl hover-lift">
-                        <div class="aspect-square overflow-hidden rounded-2xl">
-                            <img :src="group.img" :alt="group.name"
-                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                @error="handleImageError">
-                        </div>
-                        <div
-                            class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-4">
-                            <p class="text-white text-sm font-medium">{{ group.name }}</p>
-                        </div>
-                    </a>
-                </div>
-                <div class="flex flex-wrap gap-3">
-                    <a v-for="btn in data.groupBtns" :key="btn.label" :href="btn.url" target="_blank"
-                        class="btn-secondary-modern text-sm group">
-                        <i :class="btn.icon + ' group-hover:scale-110 transition-transform'"></i> {{ btn.label }}
-                    </a>
-                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-5 mb-8"><a v-for="group in data.groups" :key="group.name" :href="group.url" target="_blank" class="group relative overflow-hidden rounded-2xl hover-lift"><div class="aspect-square overflow-hidden rounded-2xl"><img :src="group.img" :alt="group.name" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" @error="handleImageError"></div><div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-4"><p class="text-white text-sm font-medium">{{ group.name }}</p></div></a></div>
+                <div class="flex flex-wrap gap-3"><a v-for="btn in data.groupBtns" :key="btn.label" :href="btn.url" target="_blank" class="btn-secondary-modern text-sm group"><i :class="btn.icon + ' group-hover:scale-110 transition-transform'"></i> {{ btn.label }}</a></div>
             </div>
 
-            <!-- Contact Section Modern -->
             <div id="contacts-section" class="bento-3d p-8 mb-12 fade-in-up" style="animation-delay: 1.1s">
-                <div class="flex items-center gap-4 mb-8">
-                    <div
-                        class="w-12 h-12 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center animate-pulse">
-                        <i class="fas fa-paper-plane text-xl text-white"></i>
-                    </div>
-                    <h2 class="text-2xl font-bold gradient-text-animated">{{ data.connectTitle || 'Connect With Me' }}
-                    </h2>
-                </div>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <a v-for="contact in data.contacts" :key="contact.label" :href="contact.url" target="_blank"
-                        class="flex items-center justify-center gap-3 px-5 py-4 rounded-full text-sm font-medium transition-all hover:scale-110 hover:shadow-xl group"
-                        :style="{ background: contact.bg, color: contact.text }">
-                        <i :class="contact.icon + ' group-hover:rotate-12 transition-transform'"></i> {{ contact.label
-                        }}
-                    </a>
-                </div>
+                <div class="flex items-center gap-4 mb-8"><div class="w-12 h-12 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center animate-pulse"><i class="fas fa-paper-plane text-xl text-white"></i></div><h2 class="text-2xl font-bold gradient-text-animated">{{ data.connectTitle || 'Connect With Me' }}</h2></div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4"><a v-for="contact in data.contacts" :key="contact.label" :href="contact.url" target="_blank" class="flex items-center justify-center gap-3 px-5 py-4 rounded-full text-sm font-medium transition-all hover:scale-110 hover:shadow-xl group" :style="{ background: contact.bg, color: contact.text }"><i :class="contact.icon + ' group-hover:rotate-12 transition-transform'"></i> {{ contact.label }}</a></div>
             </div>
 
-            <!-- View All Button -->
             <div class="text-center mb-12 fade-in-up" style="animation-delay: 1.2s">
-                <a :href="data.viewAllUrl || '#'" target="_blank"
-                    class="inline-flex items-center gap-3 px-10 py-5 rounded-full text-sm transition-all hover:scale-105 bg-gradient-to-r from-white/5 to-white/10 border border-white/10 text-gray-400 hover:text-purple-400 hover:border-purple-400 group">
-                    <i
-                        class="fas fa-arrow-up-right-from-square group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
-                    View All Galleries
-                </a>
+                <a :href="data.viewAllUrl || '#'" target="_blank" class="inline-flex items-center gap-3 px-10 py-5 rounded-full text-sm transition-all hover:scale-105 bg-gradient-to-r from-white/5 to-white/10 border border-white/10 text-gray-400 hover:text-purple-400 hover:border-purple-400 group"><i class="fas fa-arrow-up-right-from-square group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i> View All Galleries</a>
             </div>
 
-            <!-- Footer -->
             <div class="text-center pt-10 border-t border-white/10 fade-in-up" style="animation-delay: 1.3s">
                 <p class="font-bold gradient-text-animated text-lg mb-2">{{ data.footerName || 'Creative Studio' }}</p>
                 <p class="text-xs text-gray-600">{{ data.footerText || '© 2025 All rights reserved' }}</p>
             </div>
         </main>
 
-        <!-- Modal Modern -->
         <transition name="modal">
-            <div v-if="modalImage" class="fixed inset-0 modal-modern z-50 flex items-center justify-center p-4"
-                @click="closeModal">
-                <div class="max-w-5xl max-h-[90vh] rounded-2xl overflow-hidden transform transition-all duration-300"
-                    @click.stop>
+            <div v-if="modalImage" class="fixed inset-0 modal-modern z-50 flex items-center justify-center p-4" @click="closeModal">
+                <div class="max-w-5xl max-h-[90vh] rounded-2xl overflow-hidden transform transition-all duration-300" @click.stop>
                     <img :src="modalImage" class="w-full h-full object-contain" alt="Preview">
-                    <button
-                        class="absolute top-6 right-6 w-12 h-12 rounded-full bg-black/50 backdrop-blur-xl text-white hover:bg-black/70 transition-all hover:scale-110">
-                        <i class="fas fa-times text-xl"></i>
-                    </button>
+                    <button class="absolute top-6 right-6 w-12 h-12 rounded-full bg-black/50 backdrop-blur-xl text-white hover:bg-black/70 transition-all hover:scale-110"><i class="fas fa-times text-xl"></i></button>
                 </div>
             </div>
         </transition>
@@ -828,41 +534,12 @@
                 const modalImage = ref(null);
 
                 const data = ref({
-                    shopName: '',
-                    shopDesc: '',
-                    statusText: '',
-                    statusColor: '#4ade80',
-                    queueUrl: '',
-                    detailUrl: '',
-                    aboutText: '',
-                    styleTags: [],
-                    badges: [],
-                    logoUrl: '',
-                    viewAllUrl: '',
-                    footerName: '',
-                    footerText: '',
-                    groupTitle: '',
-                    groupDesc: '',
-                    portfolio: [],
-                    prices: [],
-                    doList: [],
-                    dontList: [],
-                    timeline: [],
-                    payments: [],
-                    groups: [],
-                    groupBtns: [],
-                    contacts: [],
-                    quickActionsTitle: '',
-                    portfolioTitle: '',
-                    portfolioDesc: '',
-                    aboutTitle: '',
-                    pricingTitle: '',
-                    doTitle: '',
-                    dontTitle: '',
-                    completePricingTitle: '',
-                    howToOrderTitle: '',
-                    communityTitle: '',
-                    connectTitle: ''
+                    shopName: '', shopDesc: '', statusText: '', statusColor: '#4ade80', queueUrl: '', detailUrl: '',
+                    aboutText: '', styleTags: [], badges: [], logoUrl: '', viewAllUrl: '', footerName: '', footerText: '',
+                    groupTitle: '', groupDesc: '', portfolio: [], prices: [], doList: [], dontList: [], timeline: [],
+                    payments: [], groups: [], groupBtns: [], contacts: [], quickActionsTitle: '', portfolioTitle: '',
+                    portfolioDesc: '', aboutTitle: '', pricingTitle: '', doTitle: '', dontTitle: '', completePricingTitle: '',
+                    howToOrderTitle: '', communityTitle: '', connectTitle: ''
                 });
 
                 const defaultLogo = 'https://via.placeholder.com/200x200/7c3aed/ffffff?text=CS';
@@ -874,21 +551,12 @@
                 };
 
                 const getSpeedText = (speed) => {
-                    const texts = {
-                        fast: '⚡ Fast (1-2 days)',
-                        mid: '⏳ Medium (3-5 days)',
-                        slow: '🐢 Slow (5-7 days)'
-                    };
+                    const texts = { fast: '⚡ Fast (1-2 days)', mid: '⏳ Medium (3-5 days)', slow: '🐢 Slow (5-7 days)' };
                     return texts[speed] || 'Standard';
                 };
 
                 const getPaymentIcon = (payment) => {
-                    const icons = {
-                        PromptPay: 'fas fa-mobile-alt',
-                        TrueMoney: 'fas fa-wallet',
-                        'Bank Transfer': 'fas fa-university',
-                        PayPal: 'fab fa-paypal'
-                    };
+                    const icons = { PromptPay: 'fas fa-mobile-alt', TrueMoney: 'fas fa-wallet', 'Bank Transfer': 'fas fa-university', PayPal: 'fab fa-paypal' };
                     return icons[payment] || 'fas fa-money-bill';
                 };
 
@@ -897,33 +565,14 @@
                     return colors[type] || '#c084fc';
                 };
 
-                const scrollToPrices = () => {
-                    const section = document.getElementById('pricing-section');
-                    if (section) section.scrollIntoView({ behavior: 'smooth' });
-                };
+                const scrollToPrices = () => { const section = document.getElementById('pricing-section'); if (section) section.scrollIntoView({ behavior: 'smooth' }); };
+                const scrollToPortfolio = () => { const section = document.getElementById('portfolio-section'); if (section) section.scrollIntoView({ behavior: 'smooth' }); };
+                const scrollToContacts = () => { const section = document.getElementById('contacts-section'); if (section) section.scrollIntoView({ behavior: 'smooth' }); };
 
-                const scrollToPortfolio = () => {
-                    const section = document.getElementById('portfolio-section');
-                    if (section) section.scrollIntoView({ behavior: 'smooth' });
-                };
-
-                const scrollToContacts = () => {
-                    const section = document.getElementById('contacts-section');
-                    if (section) section.scrollIntoView({ behavior: 'smooth' });
-                };
-
-                const openImageModal = (img) => {
-                    modalImage.value = img;
-                    document.body.style.overflow = 'hidden';
-                };
-
-                const closeModal = () => {
-                    modalImage.value = null;
-                    document.body.style.overflow = '';
-                };
+                const openImageModal = (img) => { modalImage.value = img; document.body.style.overflow = 'hidden'; };
+                const closeModal = () => { modalImage.value = null; document.body.style.overflow = ''; };
 
                 const handleImageError = (e) => {
-                    console.log('Image failed to load:', e.target.src);
                     e.target.src = 'https://via.placeholder.com/400x400/7c3aed/ffffff?text=No+Image';
                     e.target.onerror = null;
                 };
@@ -987,63 +636,35 @@
 
                 const loadDataFromGAS = () => {
                     loading.value = true;
-
                     const saved = localStorage.getItem('bioData');
                     if (saved) {
-                        try {
-                            const parsed = JSON.parse(saved);
-                            Object.assign(data.value, parsed);
-                            loading.value = false;
-                            loadingPortfolio.value = false;
-                            initAnimations();
-                        } catch (e) {
-                            console.error('Error parsing saved data:', e);
-                        }
+                        try { Object.assign(data.value, JSON.parse(saved)); loading.value = false; loadingPortfolio.value = false; initAnimations(); } catch(e) { console.error(e); }
                     }
 
                     const callback = 'gasCallback_' + Date.now();
                     const script = document.createElement('script');
-
                     const timeout = setTimeout(() => {
                         if (window[callback]) delete window[callback];
                         if (document.body.contains(script)) document.body.removeChild(script);
                         if (!saved) loadDefaultData();
-                        loading.value = false;
-                        loadingPortfolio.value = false;
-                        initAnimations();
+                        loading.value = false; loadingPortfolio.value = false; initAnimations();
                     }, 10000);
 
                     window[callback] = (response) => {
-                        clearTimeout(timeout);
-                        delete window[callback];
+                        clearTimeout(timeout); delete window[callback];
                         if (document.body.contains(script)) document.body.removeChild(script);
-
                         if (response && response.success && response.data) {
                             Object.keys(response.data).forEach(key => {
                                 if (response.data[key] !== undefined && response.data[key] !== null) {
                                     if (typeof response.data[key] === 'string') {
-                                        try {
-                                            const parsed = JSON.parse(response.data[key]);
-                                            data.value[key] = parsed;
-                                        } catch (e) {
-                                            data.value[key] = response.data[key];
-                                        }
-                                    } else {
-                                        data.value[key] = response.data[key];
-                                    }
+                                        try { data.value[key] = JSON.parse(response.data[key]); } catch(e) { data.value[key] = response.data[key]; }
+                                    } else { data.value[key] = response.data[key]; }
                                 }
                             });
-
                             localStorage.setItem('bioData', JSON.stringify(data.value));
-                        } else if (!saved) {
-                            loadDefaultData();
-                        }
-
-                        loading.value = false;
-                        loadingPortfolio.value = false;
-                        initAnimations();
+                        } else if (!saved) { loadDefaultData(); }
+                        loading.value = false; loadingPortfolio.value = false; initAnimations();
                     };
-
                     script.src = GAS_URL + '?action=getData&callback=' + callback;
                     document.body.appendChild(script);
                 };
@@ -1052,102 +673,38 @@
                     if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
                         try {
                             gsap.registerPlugin(ScrollTrigger);
-
-                            // Animate bento items on scroll
-                            gsap.utils.toArray('.bento-3d').forEach((item, i) => {
-                                gsap.from(item, {
-                                    scrollTrigger: {
-                                        trigger: item,
-                                        start: 'top bottom-=100',
-                                        toggleActions: 'play none none reverse',
-                                        scrub: 1
-                                    },
-                                    opacity: 0,
-                                    y: 100,
-                                    duration: 1,
-                                    ease: 'power3.out'
-                                });
+                            gsap.utils.toArray('.bento-3d').forEach((item) => {
+                                gsap.from(item, { scrollTrigger: { trigger: item, start: 'top bottom-=100', toggleActions: 'play none none reverse', scrub: 1 }, opacity: 0, y: 100, duration: 1, ease: 'power3.out' });
                             });
-
-                            // Parallax effect for floating orbs
-                            gsap.to('.floating-orb', {
-                                scrollTrigger: {
-                                    trigger: 'body',
-                                    start: 'top top',
-                                    end: 'bottom bottom',
-                                    scrub: 2
-                                },
-                                y: 200,
-                                x: 100,
-                                ease: 'none'
-                            });
-
-                        } catch (e) {
-                            console.error('GSAP animation error:', e);
-                        }
+                            gsap.to('.floating-orb', { scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 2 }, y: 200, x: 100, ease: 'none' });
+                        } catch(e) { console.error('GSAP error:', e); }
                     }
                 };
 
                 onMounted(() => {
                     loadDataFromGAS();
-
-                    // Add smooth scroll behavior
                     document.documentElement.style.scrollBehavior = 'smooth';
-
-                    // Add some 3D effect with Three.js (optional)
                     if (typeof THREE !== 'undefined') {
                         try {
-                            // Simple 3D background effect
                             const scene = new THREE.Scene();
                             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
                             const renderer = new THREE.WebGLRenderer({ alpha: true });
                             renderer.setSize(window.innerWidth, window.innerHeight);
                             renderer.setClearColor(0x000000, 0);
                             document.body.insertBefore(renderer.domElement, document.body.firstChild);
-
                             const geometry = new THREE.IcosahedronGeometry(1, 0);
                             const material = new THREE.MeshBasicMaterial({ color: 0xc084fc, wireframe: true, transparent: true, opacity: 0.1 });
                             const sphere = new THREE.Mesh(geometry, material);
                             scene.add(sphere);
-
                             camera.position.z = 5;
-
-                            const animate = () => {
-                                requestAnimationFrame(animate);
-                                sphere.rotation.x += 0.005;
-                                sphere.rotation.y += 0.008;
-                                renderer.render(scene, camera);
-                            };
+                            const animate = () => { requestAnimationFrame(animate); sphere.rotation.x += 0.005; sphere.rotation.y += 0.008; renderer.render(scene, camera); };
                             animate();
-
-                            // Cleanup on unmount
-                            onUnmounted(() => {
-                                renderer.dispose();
-                            });
-                        } catch (e) {
-                            console.log('Three.js effect skipped');
-                        }
+                            onUnmounted(() => { renderer.dispose(); });
+                        } catch(e) { console.log('Three.js effect skipped'); }
                     }
                 });
 
-                return {
-                    loading,
-                    loadingPortfolio,
-                    modalImage,
-                    data,
-                    defaultLogo,
-                    aboutText,
-                    formatPrice,
-                    getSpeedText,
-                    getPaymentIcon,
-                    getPriceColor,
-                    scrollToPrices,
-                    scrollToPortfolio,
-                    scrollToContacts,
-                    openImageModal,
-                    closeModal,
-                    handleImageError
-                };
+                return { loading, loadingPortfolio, modalImage, data, defaultLogo, aboutText, formatPrice, getSpeedText, getPaymentIcon, getPriceColor, scrollToPrices, scrollToPortfolio, scrollToContacts, openImageModal, closeModal, handleImageError };
             }
         }).mount('#app');
     </script>
