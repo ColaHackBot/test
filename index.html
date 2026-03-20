@@ -6,10 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Bio Page | Creative Portfolio</title>
 
-    <!-- SEO Meta -->
-    <meta name="description" content="Creative Portfolio & Commission Bio Page">
-    <meta name="theme-color" content="#c084fc">
-
     <!-- Tailwind CSS - CDN (สำหรับ development เท่านั้น) -->
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -59,6 +55,7 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
     <style>
+        /* CSS styles (คงเดิม) */
         * {
             margin: 0;
             padding: 0;
@@ -316,12 +313,13 @@
                         <div
                             class="w-32 h-32 rounded-full mx-auto overflow-hidden ring-4 ring-purple-500/30 group-hover:ring-purple-500/50 transition-all duration-500">
                             <img :src="data.logoUrl || defaultLogo" class="w-full h-full object-cover" alt="Avatar"
-                                @error="imgError">
+                                @error="handleImageError">
                         </div>
                         <div class="absolute -top-2 -right-2 text-3xl animate-bounce">✨</div>
                     </div>
                     <h1 class="text-3xl font-bold mt-4 gradient-text">{{ data.shopName || 'Creative Studio' }}</h1>
-                    <p class="text-gray-400 text-sm mt-2">{{ data.shopDesc || 'Bringing imagination to life through digital art' }}</p>
+                    <p class="text-gray-400 text-sm mt-2">{{ data.shopDesc || 'Bringing imagination to life through
+                        digital art' }}</p>
                     <div class="flex items-center justify-center gap-2 mt-4">
                         <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
                         <span class="text-xs text-gray-400">{{ data.statusText || 'Open for Commissions' }}</span>
@@ -335,7 +333,8 @@
                 </div>
 
                 <div class="md:col-span-2 bento-item p-8">
-                    <h3 class="text-xl font-semibold mb-4 gradient-text">Quick Actions</h3>
+                    <h3 class="text-xl font-semibold mb-4 gradient-text">{{ data.quickActionsTitle || 'Quick Actions' }}
+                    </h3>
                     <div class="grid grid-cols-2 gap-4">
                         <a :href="data.queueUrl || '#'" target="_blank" class="btn-primary-custom text-center">
                             <i class="fas fa-list-check mr-2"></i> Check Queue
@@ -361,12 +360,12 @@
                 </div>
             </div>
 
-            <!-- Portfolio Gallery -->
+            <!-- Portfolio Gallery - แก้ไขให้ใช้ dynamic text -->
             <div class="bento-item p-8 mb-8">
                 <div class="flex items-center justify-between mb-6">
                     <div>
-                        <h2 class="text-2xl font-bold gradient-text">Portfolio</h2>
-                        <p class="text-gray-500 text-sm mt-1">Latest creative works</p>
+                        <h2 class="text-2xl font-bold gradient-text">{{ data.portfolioTitle || 'Portfolio' }}</h2>
+                        <p class="text-gray-500 text-sm mt-1">{{ data.portfolioDesc || 'Latest creative works' }}</p>
                     </div>
                     <i class="fas fa-images text-3xl text-purple-500/50"></i>
                 </div>
@@ -374,21 +373,25 @@
                     <div v-for="i in 6" :key="i" class="aspect-square rounded-2xl bg-white/5 animate-pulse"></div>
                 </div>
                 <div v-else class="gallery-grid">
-                    <div v-for="item in data.portfolio" :key="item.name" class="gallery-item"
+                    <div v-for="(item, idx) in data.portfolio" :key="idx" class="gallery-item"
                         @click="openImageModal(item.img)">
-                        <img :src="item.img" :alt="item.name" loading="lazy" @error="imgError">
+                        <img :src="item.img" :alt="item.name" loading="lazy" @error="handleImageError">
                     </div>
+                </div>
+                <div v-if="!data.portfolio || data.portfolio.length === 0" class="text-center py-12">
+                    <i class="fas fa-images text-4xl text-gray-600 mb-3"></i>
+                    <p class="text-gray-500">No artworks yet. Add some in admin panel!</p>
                 </div>
             </div>
 
-            <!-- About & Style Tags -->
+            <!-- About & Style Tags - แก้ไขให้ใช้ dynamic text -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                 <div class="bento-item p-8">
                     <div class="flex items-center gap-3 mb-4">
                         <i class="fas fa-store text-2xl text-purple-400"></i>
-                        <h2 class="text-2xl font-bold gradient-text">About Studio</h2>
+                        <h2 class="text-2xl font-bold gradient-text">{{ data.aboutTitle || 'About Studio' }}</h2>
                     </div>
-                    <p class="text-gray-300 leading-relaxed">{{ data.aboutText || 'Welcome to my creative studio! I specialize in bringing imagination to life through digital art.' }}</p>
+                    <p class="text-gray-300 leading-relaxed">{{ data.aboutText || aboutText }}</p>
                     <div class="mt-6">
                         <p class="text-sm text-gray-400 mb-3">Style Tags</p>
                         <div class="flex flex-wrap gap-2">
@@ -403,7 +406,7 @@
                 <div class="bento-item p-8">
                     <div class="flex items-center gap-3 mb-4">
                         <i class="fas fa-tags text-2xl text-pink-400"></i>
-                        <h2 class="text-2xl font-bold gradient-text">Pricing</h2>
+                        <h2 class="text-2xl font-bold gradient-text">{{ data.pricingTitle || 'Pricing' }}</h2>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div v-for="item in (data.prices || []).slice(0, 4)" :key="item.name" class="price-card p-4">
@@ -418,12 +421,12 @@
                 </div>
             </div>
 
-            <!-- Do & Don't -->
+            <!-- Do & Don't - แก้ไขให้ใช้ dynamic text -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                 <div class="bento-item p-8">
                     <div class="flex items-center gap-3 mb-4">
                         <i class="fas fa-check-circle text-2xl text-green-400"></i>
-                        <h2 class="text-2xl font-bold gradient-text">What I Do</h2>
+                        <h2 class="text-2xl font-bold gradient-text">{{ data.doTitle || 'What I Do' }}</h2>
                     </div>
                     <ul class="space-y-3">
                         <li v-for="item in data.doList" :key="item" class="flex items-start gap-3">
@@ -436,7 +439,7 @@
                 <div class="bento-item p-8">
                     <div class="flex items-center gap-3 mb-4">
                         <i class="fas fa-times-circle text-2xl text-red-400"></i>
-                        <h2 class="text-2xl font-bold gradient-text">What I Don't</h2>
+                        <h2 class="text-2xl font-bold gradient-text">{{ data.dontTitle || 'What I Don\'t' }}</h2>
                     </div>
                     <ul class="space-y-3">
                         <li v-for="item in data.dontList" :key="item" class="flex items-start gap-3">
@@ -447,11 +450,12 @@
                 </div>
             </div>
 
-            <!-- Full Pricing Section -->
+            <!-- Full Pricing Section - แก้ไขให้ใช้ dynamic text -->
             <div id="pricing-section" class="bento-item p-8 mb-8">
                 <div class="flex items-center gap-3 mb-6">
                     <i class="fas fa-crown text-2xl text-yellow-400"></i>
-                    <h2 class="text-2xl font-bold gradient-text">Complete Pricing</h2>
+                    <h2 class="text-2xl font-bold gradient-text">{{ data.completePricingTitle || 'Complete Pricing' }}
+                    </h2>
                 </div>
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     <div v-for="item in data.prices" :key="item.name" class="price-card">
@@ -462,11 +466,11 @@
                 </div>
             </div>
 
-            <!-- How to Order -->
+            <!-- How to Order - แก้ไขให้ใช้ dynamic text -->
             <div class="bento-item p-8 mb-8">
                 <div class="flex items-center gap-3 mb-6">
                     <i class="fas fa-clipboard-list text-2xl text-purple-400"></i>
-                    <h2 class="text-2xl font-bold gradient-text">How to Order</h2>
+                    <h2 class="text-2xl font-bold gradient-text">{{ data.howToOrderTitle || 'How to Order' }}</h2>
                 </div>
                 <div class="space-y-6">
                     <div v-for="step in data.timeline" :key="step.step" class="timeline-item">
@@ -488,11 +492,12 @@
                 </div>
             </div>
 
-            <!-- Groups & Community -->
+            <!-- Groups & Community - แก้ไขให้ใช้ dynamic text -->
             <div class="bento-item p-8 mb-8">
                 <div class="flex items-center gap-3 mb-6">
                     <i class="fas fa-users text-2xl text-blue-400"></i>
-                    <h2 class="text-2xl font-bold gradient-text">{{ data.groupTitle || 'Community' }}</h2>
+                    <h2 class="text-2xl font-bold gradient-text">{{ data.communityTitle || data.groupTitle ||
+                        'Community' }}</h2>
                 </div>
                 <p class="text-gray-400 mb-6">{{ data.groupDesc || 'Join our creative community' }}</p>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -501,7 +506,7 @@
                         <div class="aspect-square overflow-hidden rounded-2xl">
                             <img :src="group.img" :alt="group.name"
                                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                @error="imgError">
+                                @error="handleImageError">
                         </div>
                         <div
                             class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
@@ -517,11 +522,11 @@
                 </div>
             </div>
 
-            <!-- Contact Section -->
+            <!-- Contact Section - แก้ไขให้ใช้ dynamic text -->
             <div class="bento-item p-8 mb-8">
                 <div class="flex items-center gap-3 mb-6">
                     <i class="fas fa-paper-plane text-2xl text-pink-400"></i>
-                    <h2 class="text-2xl font-bold gradient-text">Connect With Me</h2>
+                    <h2 class="text-2xl font-bold gradient-text">{{ data.connectTitle || 'Connect With Me' }}</h2>
                 </div>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                     <a v-for="contact in data.contacts" :key="contact.label" :href="contact.url" target="_blank"
@@ -595,10 +600,22 @@
                     payments: [],
                     groups: [],
                     groupBtns: [],
-                    contacts: []
+                    contacts: [],
+                    // เพิ่มฟิลด์ข้อความใหม่
+                    quickActionsTitle: '',
+                    portfolioTitle: '',
+                    portfolioDesc: '',
+                    aboutTitle: '',
+                    pricingTitle: '',
+                    doTitle: '',
+                    dontTitle: '',
+                    completePricingTitle: '',
+                    howToOrderTitle: '',
+                    communityTitle: '',
+                    connectTitle: ''
                 });
 
-                const defaultLogo = 'https://placehold.co/200x200/7c3aed/ffffff?text=CS';
+                const defaultLogo = 'https://via.placeholder.com/200x200/7c3aed/ffffff?text=CS';
                 const aboutText = 'Welcome to my creative studio! I specialize in bringing imagination to life through digital art.';
 
                 const formatPrice = (price) => {
@@ -640,8 +657,10 @@
                     document.body.style.overflow = '';
                 };
 
-                const imgError = (e) => {
-                    e.target.src = 'https://placehold.co/400x400/7c3aed/ffffff?text=No+Image';
+                const handleImageError = (e) => {
+                    console.log('Image failed to load:', e.target.src);
+                    e.target.src = 'https://via.placeholder.com/400x400/7c3aed/ffffff?text=No+Image';
+                    e.target.onerror = null;
                 };
 
                 const loadDefaultData = () => {
@@ -655,11 +674,26 @@
                     data.value.groupTitle = 'Art Communities';
                     data.value.groupDesc = 'Join our creative community';
 
+                    // ตั้งค่า default text
+                    data.value.quickActionsTitle = 'Quick Actions';
+                    data.value.portfolioTitle = 'Portfolio';
+                    data.value.portfolioDesc = 'Latest creative works';
+                    data.value.aboutTitle = 'About Studio';
+                    data.value.pricingTitle = 'Pricing';
+                    data.value.doTitle = 'What I Do';
+                    data.value.dontTitle = 'What I Don\'t';
+                    data.value.completePricingTitle = 'Complete Pricing';
+                    data.value.howToOrderTitle = 'How to Order';
+                    data.value.communityTitle = 'Community';
+                    data.value.connectTitle = 'Connect With Me';
+
                     data.value.portfolio = [
-                        { img: 'https://placehold.co/400x400/7c3aed/ffffff?text=Art+1', name: 'Artwork 1', url: '#' },
-                        { img: 'https://placehold.co/400x400/f472b6/ffffff?text=Art+2', name: 'Artwork 2', url: '#' },
-                        { img: 'https://placehold.co/400x400/60a5fa/ffffff?text=Art+3', name: 'Artwork 3', url: '#' },
-                        { img: 'https://placehold.co/400x400/4ade80/ffffff?text=Art+4', name: 'Artwork 4', url: '#' }
+                        { img: 'https://picsum.photos/id/1015/400/400', name: 'Mountain Landscape', url: '#' },
+                        { img: 'https://picsum.photos/id/104/400/400', name: 'Portrait Study', url: '#' },
+                        { img: 'https://picsum.photos/id/106/400/400', name: 'Flower Garden', url: '#' },
+                        { img: 'https://picsum.photos/id/107/400/400', name: 'Animal Sketch', url: '#' },
+                        { img: 'https://picsum.photos/id/108/400/400', name: 'Abstract Art', url: '#' },
+                        { img: 'https://picsum.photos/id/116/400/400', name: 'City View', url: '#' }
                     ];
 
                     data.value.prices = [
@@ -780,7 +814,7 @@
                     scrollToPrices,
                     openImageModal,
                     closeModal,
-                    imgError
+                    handleImageError
                 };
             }
         }).mount('#app');
