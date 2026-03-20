@@ -40,6 +40,9 @@
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -298,34 +301,6 @@
             color: transparent;
         }
 
-        /* Portfolio Image Styles */
-        .portfolio-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .portfolio-img:hover {
-            transform: scale(1.05);
-        }
-
-        .img-loading {
-            background: linear-gradient(90deg, #1a1a2a 0%, #2a2a3a 50%, #1a1a2a 100%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-        }
-
-        @keyframes loading {
-            0% {
-                background-position: 200% 0;
-            }
-
-            100% {
-                background-position: -200% 0;
-            }
-        }
-
         @media (max-width: 768px) {
             .sidebar-glass {
                 transform: translateX(-100%);
@@ -511,7 +486,7 @@
 
                 <!-- Panels -->
                 <div class="p-8">
-                    <!-- Dashboard Panel (ลบ Analytics Overview แล้ว) -->
+                    <!-- Dashboard Panel - ลบ Analytics Overview ออก -->
                     <div v-show="currentPanel === 'dashboard'" class="space-y-6 fade-in-up">
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                             <div class="glass-card p-6">
@@ -667,7 +642,7 @@
                         </div>
                     </div>
 
-                    <!-- Portfolio Panel (แก้ไขให้แสดงรูปได้) -->
+                    <!-- Portfolio Panel - แก้ไขให้แสดงรูปได้ -->
                     <div v-show="currentPanel === 'portfolio'" class="space-y-6 fade-in-up">
                         <div class="glass-card p-6">
                             <h3 class="font-semibold mb-6 gradient-text">Add New Artwork</h3>
@@ -676,7 +651,12 @@
                                     <label class="form-label">Image URL</label>
                                     <input type="text" v-model="newPortfolio.img" class="form-input"
                                         placeholder="https://...">
-                                    <p class="text-xs text-gray-500 mt-1">เช่น: https://example.com/image.jpg</p>
+                                    <div v-if="newPortfolio.img" class="mt-2">
+                                        <div class="w-20 h-20 rounded-lg overflow-hidden border border-white/20">
+                                            <img :src="newPortfolio.img" class="w-full h-full object-cover"
+                                                @error="testImageError">
+                                        </div>
+                                    </div>
                                 </div>
                                 <div>
                                     <label class="form-label">Artwork Name</label>
@@ -694,15 +674,20 @@
                         </div>
 
                         <div class="glass-card p-6">
-                            <h3 class="font-semibold mb-6 gradient-text">Portfolio Gallery</h3>
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="font-semibold gradient-text">Portfolio Gallery ({{ data.portfolio?.length ||
+                                    0 }} items)</h3>
+                                <button class="btn-secondary text-sm" @click="refreshGallery">
+                                    <i class="fas fa-sync-alt mr-1"></i> Refresh
+                                </button>
+                            </div>
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                                 <div v-for="(item, idx) in data.portfolio" :key="idx" class="relative group">
-                                    <div class="aspect-square rounded-xl overflow-hidden bg-gray-800">
-                                        <img :src="item.img" :alt="item.name"
-                                            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                            @error="handleImageError" @load="handleImageLoad">
+                                    <div class="aspect-square rounded-xl overflow-hidden bg-white/5">
+                                        <img :src="item.img" :alt="item.name" class="w-full h-full object-cover"
+                                            @error="imgError" referrerpolicy="no-referrer">
                                     </div>
-                                    <p class="text-sm mt-2 truncate">{{ item.name || 'Untitled' }}</p>
+                                    <p class="text-sm mt-2 truncate">{{ item.name }}</p>
                                     <button
                                         class="absolute top-2 right-2 bg-black/60 rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
                                         @click="removePortfolio(idx)">
@@ -711,7 +696,7 @@
                                 </div>
                             </div>
                             <p v-if="!data.portfolio || !data.portfolio.length" class="text-center text-gray-500 py-8">
-                                No artworks added yet
+                                No artworks added yet. Add your first artwork above!
                             </p>
                         </div>
                     </div>
@@ -1053,7 +1038,7 @@
     <script>
         const { createApp, ref, computed, onMounted } = Vue;
 
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycbyF2wqq_pip02p4hM_OTNctIqsdOgregzLQzjyuiVqehmCiwm_U8kzVTfWKB5M2l8tz/exec';
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzvIPWec8yBxqGOcNUYDcyMNfQ2CZQpp-AF-m_2yIzdxrZ2PEiwy7bg7DtlHKj7mSyB/exec';
 
         createApp({
             setup() {
@@ -1338,8 +1323,8 @@
                             addToHistory('Data synced to GAS');
                             Swal.fire({
                                 icon: 'success',
-                                title: 'บันทึกสำเร็จ!',
-                                text: 'ข้อมูลถูกบันทึกเรียบร้อยแล้ว',
+                                title: 'Saved!',
+                                text: 'All changes have been saved and synced to cloud',
                                 toast: true,
                                 position: 'top-end',
                                 showConfirmButton: false,
@@ -1348,19 +1333,19 @@
                         } catch (err) {
                             Swal.fire({
                                 icon: 'warning',
-                                title: 'บันทึกเฉพาะ Local',
-                                text: 'บันทึกในเครื่องสำเร็จ แต่ไม่สามารถ sync กับ GAS ได้',
+                                title: 'Saved Locally',
+                                text: 'Saved locally but failed to sync with GAS: ' + err.message,
                                 toast: true,
                                 position: 'top-end',
                                 showConfirmButton: false,
-                                timer: 2000
+                                timer: 3000
                             });
                         }
                     } else {
                         Swal.fire({
                             icon: 'success',
-                            title: 'บันทึกสำเร็จ!',
-                            text: 'ข้อมูลถูกบันทึกไว้ในเครื่อง',
+                            title: 'Saved!',
+                            text: 'All changes have been saved locally',
                             toast: true,
                             position: 'top-end',
                             showConfirmButton: false,
@@ -1470,87 +1455,100 @@
                     saveAll();
                 };
 
-                // Portfolio management (แก้ไขให้แสดงรูปได้)
-                const handleImageError = (e) => {
-                    console.error('Image failed to load:', e.target.src);
-                    e.target.src = 'https://placehold.co/400x400/7c3aed/ffffff?text=Image+Not+Found';
-                    e.target.onerror = null;
-                };
-
-                const handleImageLoad = (e) => {
-                    console.log('Image loaded successfully:', e.target.src);
-                };
-
-                const isValidImageUrl = (url) => {
-                    const allowedDomains = [
-                        'javgg.net',
-                        'placehold.co',
-                        'images.unsplash.com',
-                        'i.imgur.com',
-                        'cdn.discordapp.com',
-                        'media.discordapp.net',
-                        'picsum.photos'
-                    ];
-
-                    try {
-                        const urlObj = new URL(url);
-                        const hasImageExt = /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(urlObj.pathname);
-                        const isAllowedDomain = allowedDomains.some(domain => urlObj.hostname.includes(domain));
-                        return hasImageExt || isAllowedDomain;
-                    } catch (e) {
-                        return false;
-                    }
-                };
-
+                // Portfolio management
                 const addPortfolio = () => {
-                    if (!newPortfolio.value.img) {
+                    if (!newPortfolio.value.img || !newPortfolio.value.img.trim()) {
                         Swal.fire({
                             icon: 'warning',
-                            title: 'กรุณาใส่ URL รูปภาพ',
-                            text: 'URL รูปภาพจำเป็นต้องมี',
+                            title: 'Missing Image URL',
+                            text: 'Please provide an image URL for the artwork',
                             toast: true,
                             position: 'top-end'
                         });
                         return;
                     }
 
-                    const imgUrl = newPortfolio.value.img.trim();
-
-                    if (!data.value.portfolio) data.value.portfolio = [];
-
-                    const testImg = new Image();
-                    testImg.onload = () => {
-                        data.value.portfolio.push({
-                            img: imgUrl,
-                            name: newPortfolio.value.name || 'Artwork ' + (data.value.portfolio.length + 1),
-                            url: newPortfolio.value.url || '#'
-                        });
-                        newPortfolio.value = { img: '', name: '', url: '#' };
-                        saveAll();
+                    if (!newPortfolio.value.name || !newPortfolio.value.name.trim()) {
                         Swal.fire({
-                            icon: 'success',
-                            title: 'เพิ่มรูปสำเร็จ!',
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                    };
-                    testImg.onerror = () => {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'ไม่สามารถโหลดรูปภาพได้',
-                            text: 'กรุณาตรวจสอบ URL อีกครั้ง',
+                            icon: 'warning',
+                            title: 'Missing Name',
+                            text: 'Please provide a name for the artwork',
                             toast: true,
                             position: 'top-end'
                         });
+                        return;
+                    }
+
+                    if (!data.value.portfolio) data.value.portfolio = [];
+
+                    const newItem = {
+                        img: newPortfolio.value.img.trim(),
+                        name: newPortfolio.value.name.trim(),
+                        url: newPortfolio.value.url || '#'
                     };
-                    testImg.src = imgUrl;
+
+                    data.value.portfolio.push(newItem);
+
+                    newPortfolio.value = { img: '', name: '', url: '#' };
+
+                    saveAll();
+                    updateStats();
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Added!',
+                        text: `"${newItem.name}" has been added to portfolio`,
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
                 };
 
                 const removePortfolio = (idx) => {
-                    data.value.portfolio.splice(idx, 1);
-                    saveAll();
+                    Swal.fire({
+                        title: 'Remove Artwork?',
+                        text: `Remove "${data.value.portfolio[idx].name}" from gallery?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, remove',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            data.value.portfolio.splice(idx, 1);
+                            saveAll();
+                            Swal.fire({ icon: 'success', title: 'Removed!', toast: true, timer: 1500 });
+                        }
+                    });
+                };
+
+                const refreshGallery = () => {
+                    const currentPortfolio = [...data.value.portfolio];
+                    data.value.portfolio = [];
+                    setTimeout(() => {
+                        data.value.portfolio = currentPortfolio;
+                    }, 10);
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Refreshed!',
+                        text: 'Gallery has been refreshed',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                };
+
+                const imgError = (e) => {
+                    console.log('Image failed to load:', e.target.src);
+                    e.target.src = 'https://placehold.co/400x400/7c3aed/ffffff?text=Image+Not+Found';
+                    e.target.onerror = null;
+                };
+
+                const testImageError = (e) => {
+                    console.log('Test image failed:', e.target.src);
+                    e.target.src = 'https://placehold.co/100x100/7c3aed/ffffff?text=Invalid+URL';
                 };
 
                 // Price management
@@ -1915,10 +1913,6 @@
                     });
                 };
 
-                const imgError = (e) => {
-                    e.target.src = 'https://placehold.co/400x400/7c3aed/ffffff?text=No+Image';
-                };
-
                 // Load credentials
                 const loadCredentials = () => {
                     const user = localStorage.getItem('adminUser');
@@ -2005,10 +1999,6 @@
                     updateColor,
                     getPriceColor,
 
-                    // Portfolio image handlers
-                    handleImageError,
-                    handleImageLoad,
-
                     // Management functions
                     addBadge,
                     removeBadge,
@@ -2016,6 +2006,7 @@
                     removeStyleTag,
                     addPortfolio,
                     removePortfolio,
+                    refreshGallery,
                     addPrice,
                     removePrice,
                     addDo,
@@ -2040,7 +2031,8 @@
                     saveAll,
 
                     // Utilities
-                    imgError
+                    imgError,
+                    testImageError
                 };
             }
         }).mount('#app');
