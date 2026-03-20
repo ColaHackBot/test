@@ -40,9 +40,6 @@
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -301,6 +298,34 @@
             color: transparent;
         }
 
+        /* Portfolio Image Styles */
+        .portfolio-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .portfolio-img:hover {
+            transform: scale(1.05);
+        }
+
+        .img-loading {
+            background: linear-gradient(90deg, #1a1a2a 0%, #2a2a3a 50%, #1a1a2a 100%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
         @media (max-width: 768px) {
             .sidebar-glass {
                 transform: translateX(-100%);
@@ -475,9 +500,6 @@
                     </div>
 
                     <div class="flex items-center gap-3">
-                        <span v-if="autoSave" class="status-badge bg-green-500/20 text-green-400">
-                            <i class="fas fa-check-circle"></i> Auto-save
-                        </span>
                         <button class="btn-primary px-5 py-2 text-sm" @click="saveAll">
                             <i class="fas fa-save mr-2"></i> Save
                         </button>
@@ -489,7 +511,7 @@
 
                 <!-- Panels -->
                 <div class="p-8">
-                    <!-- Dashboard Panel -->
+                    <!-- Dashboard Panel (ลบ Analytics Overview แล้ว) -->
                     <div v-show="currentPanel === 'dashboard'" class="space-y-6 fade-in-up">
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                             <div class="glass-card p-6">
@@ -524,11 +546,6 @@
                                 <p class="text-4xl font-bold gradient-text">{{ stats.groups }}</p>
                                 <p class="text-xs text-gray-500 mt-2">Groups</p>
                             </div>
-                        </div>
-
-                        <div class="glass-card p-6">
-                            <h3 class="font-semibold mb-4 gradient-text">Analytics Overview</h3>
-                            <canvas id="visitorChart" height="200"></canvas>
                         </div>
 
                         <div class="glass-card p-6">
@@ -650,7 +667,7 @@
                         </div>
                     </div>
 
-                    <!-- Portfolio Panel -->
+                    <!-- Portfolio Panel (แก้ไขให้แสดงรูปได้) -->
                     <div v-show="currentPanel === 'portfolio'" class="space-y-6 fade-in-up">
                         <div class="glass-card p-6">
                             <h3 class="font-semibold mb-6 gradient-text">Add New Artwork</h3>
@@ -659,6 +676,7 @@
                                     <label class="form-label">Image URL</label>
                                     <input type="text" v-model="newPortfolio.img" class="form-input"
                                         placeholder="https://...">
+                                    <p class="text-xs text-gray-500 mt-1">เช่น: https://example.com/image.jpg</p>
                                 </div>
                                 <div>
                                     <label class="form-label">Artwork Name</label>
@@ -679,10 +697,12 @@
                             <h3 class="font-semibold mb-6 gradient-text">Portfolio Gallery</h3>
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                                 <div v-for="(item, idx) in data.portfolio" :key="idx" class="relative group">
-                                    <div class="aspect-square rounded-xl overflow-hidden">
-                                        <img :src="item.img" class="w-full h-full object-cover" @error="imgError">
+                                    <div class="aspect-square rounded-xl overflow-hidden bg-gray-800">
+                                        <img :src="item.img" :alt="item.name"
+                                            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                            @error="handleImageError" @load="handleImageLoad">
                                     </div>
-                                    <p class="text-sm mt-2 truncate">{{ item.name }}</p>
+                                    <p class="text-sm mt-2 truncate">{{ item.name || 'Untitled' }}</p>
                                     <button
                                         class="absolute top-2 right-2 bg-black/60 rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
                                         @click="removePortfolio(idx)">
@@ -691,7 +711,8 @@
                                 </div>
                             </div>
                             <p v-if="!data.portfolio || !data.portfolio.length" class="text-center text-gray-500 py-8">
-                                No artworks added yet</p>
+                                No artworks added yet
+                            </p>
                         </div>
                     </div>
 
@@ -1032,7 +1053,7 @@
     <script>
         const { createApp, ref, computed, onMounted } = Vue;
 
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzkNz9McAOXpfZ2WzspAXCajkGI1E_R6Z8Vtht8qMQaSlFbCIkf0JKemBpXLSdyzTEL/exec';
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbyF2wqq_pip02p4hM_OTNctIqsdOgregzLQzjyuiVqehmCiwm_U8kzVTfWKB5M2l8tz/exec';
 
         createApp({
             setup() {
@@ -1046,7 +1067,6 @@
                 // UI
                 const sidebarOpen = ref(false);
                 const currentPanel = ref('dashboard');
-                const autoSave = ref(true);
 
                 // Data
                 const data = ref({
@@ -1141,7 +1161,6 @@
                 // Stats
                 const stats = ref({ portfolio: 0, prices: 0, contacts: 0, groups: 0 });
                 const historyLogs = ref([]);
-                let visitorChart = null;
 
                 // Computed
                 const panelTitle = computed(() => {
@@ -1227,7 +1246,7 @@
                             if (window[callback]) delete window[callback];
                             if (document.body.contains(script)) document.body.removeChild(script);
                             reject(new Error('Connection timeout - Please check your GAS URL and deployment'));
-                        }, 15000); // เพิ่ม timeout เป็น 15 วินาที
+                        }, 15000);
 
                         window[callback] = (response) => {
                             clearTimeout(timeout);
@@ -1241,7 +1260,6 @@
                             }
                         };
 
-                        // ใช้ URL ที่ถูกต้อง
                         let url = gasUrl.value;
                         if (!url.includes('?') && !url.includes('&')) {
                             url += '?action=saveData&data=' + dataStr + '&callback=' + callback;
@@ -1318,12 +1336,36 @@
                         try {
                             await saveToGAS();
                             addToHistory('Data synced to GAS');
-                            Swal.fire({ icon: 'success', title: 'Saved!', text: 'All changes have been saved and synced', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'บันทึกสำเร็จ!',
+                                text: 'ข้อมูลถูกบันทึกเรียบร้อยแล้ว',
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
                         } catch (err) {
-                            Swal.fire({ icon: 'warning', title: 'Saved Locally', text: 'Saved locally but failed to sync with GAS', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'บันทึกเฉพาะ Local',
+                                text: 'บันทึกในเครื่องสำเร็จ แต่ไม่สามารถ sync กับ GAS ได้',
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
                         }
                     } else {
-                        Swal.fire({ icon: 'success', title: 'Saved!', text: 'All changes have been saved locally', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'บันทึกสำเร็จ!',
+                            text: 'ข้อมูลถูกบันทึกไว้ในเครื่อง',
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
                     }
                 };
 
@@ -1428,16 +1470,82 @@
                     saveAll();
                 };
 
-                // Portfolio management
+                // Portfolio management (แก้ไขให้แสดงรูปได้)
+                const handleImageError = (e) => {
+                    console.error('Image failed to load:', e.target.src);
+                    e.target.src = 'https://placehold.co/400x400/7c3aed/ffffff?text=Image+Not+Found';
+                    e.target.onerror = null;
+                };
+
+                const handleImageLoad = (e) => {
+                    console.log('Image loaded successfully:', e.target.src);
+                };
+
+                const isValidImageUrl = (url) => {
+                    const allowedDomains = [
+                        'javgg.net',
+                        'placehold.co',
+                        'images.unsplash.com',
+                        'i.imgur.com',
+                        'cdn.discordapp.com',
+                        'media.discordapp.net',
+                        'picsum.photos'
+                    ];
+
+                    try {
+                        const urlObj = new URL(url);
+                        const hasImageExt = /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(urlObj.pathname);
+                        const isAllowedDomain = allowedDomains.some(domain => urlObj.hostname.includes(domain));
+                        return hasImageExt || isAllowedDomain;
+                    } catch (e) {
+                        return false;
+                    }
+                };
+
                 const addPortfolio = () => {
-                    if (newPortfolio.value.img) {
-                        if (!data.value.portfolio) data.value.portfolio = [];
-                        data.value.portfolio.push({ ...newPortfolio.value });
+                    if (!newPortfolio.value.img) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'กรุณาใส่ URL รูปภาพ',
+                            text: 'URL รูปภาพจำเป็นต้องมี',
+                            toast: true,
+                            position: 'top-end'
+                        });
+                        return;
+                    }
+
+                    const imgUrl = newPortfolio.value.img.trim();
+
+                    if (!data.value.portfolio) data.value.portfolio = [];
+
+                    const testImg = new Image();
+                    testImg.onload = () => {
+                        data.value.portfolio.push({
+                            img: imgUrl,
+                            name: newPortfolio.value.name || 'Artwork ' + (data.value.portfolio.length + 1),
+                            url: newPortfolio.value.url || '#'
+                        });
                         newPortfolio.value = { img: '', name: '', url: '#' };
                         saveAll();
-                    } else {
-                        Swal.fire({ icon: 'warning', title: 'Please provide image URL', toast: true });
-                    }
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'เพิ่มรูปสำเร็จ!',
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    };
+                    testImg.onerror = () => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'ไม่สามารถโหลดรูปภาพได้',
+                            text: 'กรุณาตรวจสอบ URL อีกครั้ง',
+                            toast: true,
+                            position: 'top-end'
+                        });
+                    };
+                    testImg.src = imgUrl;
                 };
 
                 const removePortfolio = (idx) => {
@@ -1807,51 +1915,8 @@
                     });
                 };
 
-                // Chart initialization
-                const initChart = () => {
-                    setTimeout(() => {
-                        const ctx = document.getElementById('visitorChart');
-                        if (ctx && typeof Chart !== 'undefined') {
-                            visitorChart = new Chart(ctx, {
-                                type: 'line',
-                                data: {
-                                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                                    datasets: [{
-                                        label: 'Visitors',
-                                        data: [120, 150, 180, 200, 250, 300, 280],
-                                        borderColor: '#c084fc',
-                                        backgroundColor: 'rgba(192, 132, 252, 0.1)',
-                                        tension: 0.4,
-                                        fill: true
-                                    }]
-                                },
-                                options: {
-                                    responsive: true,
-                                    maintainAspectRatio: true,
-                                    plugins: {
-                                        legend: { labels: { color: '#94a3b8' } }
-                                    },
-                                    scales: {
-                                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
-                                        x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } }
-                                    }
-                                }
-                            });
-                        }
-                    }, 500);
-                };
-
                 const imgError = (e) => {
                     e.target.src = 'https://placehold.co/400x400/7c3aed/ffffff?text=No+Image';
-                };
-
-                // Auto-save
-                const initAutoSave = () => {
-                    setInterval(() => {
-                        if (autoSave.value) {
-                            localStorage.setItem('bioData', JSON.stringify(data.value));
-                        }
-                    }, 30000);
                 };
 
                 // Load credentials
@@ -1869,8 +1934,6 @@
                     loadData();
                     loadHistory();
                     loadThemes();
-                    initChart();
-                    initAutoSave();
                     loadCredentials();
                 });
 
@@ -1887,7 +1950,6 @@
                     // UI
                     sidebarOpen,
                     currentPanel,
-                    autoSave,
                     panelTitle,
                     toggleSidebar,
                     showPanel,
@@ -1942,6 +2004,10 @@
                     defaultColors,
                     updateColor,
                     getPriceColor,
+
+                    // Portfolio image handlers
+                    handleImageError,
+                    handleImageLoad,
 
                     // Management functions
                     addBadge,
