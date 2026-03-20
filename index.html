@@ -386,7 +386,7 @@
                 <div class="bento-item p-8">
                     <div class="flex items-center gap-3 mb-4">
                         <i class="fas fa-store text-2xl text-purple-400"></i>
-                        <h2 class="text-xl font-semibold">About Studio</h2>
+                        <h2 class="text-2xl font-bold gradient-text">About Studio</h2>
                     </div>
                     <p class="text-gray-300 leading-relaxed">{{ data.aboutText || aboutText }}</p>
                     <div class="mt-6">
@@ -403,7 +403,7 @@
                 <div class="bento-item p-8">
                     <div class="flex items-center gap-3 mb-4">
                         <i class="fas fa-tags text-2xl text-pink-400"></i>
-                        <h2 class="text-xl font-semibold">Pricing</h2>
+                        <h2 class="text-2xl font-bold gradient-text">Pricing</h2>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div v-for="item in (data.prices || []).slice(0, 4)" :key="item.name" class="price-card p-4">
@@ -423,7 +423,7 @@
                 <div class="bento-item p-8">
                     <div class="flex items-center gap-3 mb-4">
                         <i class="fas fa-check-circle text-2xl text-green-400"></i>
-                        <h2 class="text-xl font-semibold">What I Do</h2>
+                        <h2 class="text-2xl font-bold gradient-text">What I Do</h2>
                     </div>
                     <ul class="space-y-3">
                         <li v-for="item in data.doList" :key="item" class="flex items-start gap-3">
@@ -436,7 +436,7 @@
                 <div class="bento-item p-8">
                     <div class="flex items-center gap-3 mb-4">
                         <i class="fas fa-times-circle text-2xl text-red-400"></i>
-                        <h2 class="text-xl font-semibold">What I Don't</h2>
+                        <h2 class="text-2xl font-bold gradient-text">What I Don't</h2>
                     </div>
                     <ul class="space-y-3">
                         <li v-for="item in data.dontList" :key="item" class="flex items-start gap-3">
