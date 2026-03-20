@@ -6,12 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Bio Page | Creative Portfolio</title>
 
-    <!-- Tailwind CSS - Production CDN (ใช้เฉพาะกรณีไม่สามารถ build ได้) -->
+    <!-- Tailwind CSS - Production CDN -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     
-    <!-- Custom CSS to supplement Tailwind -->
     <style>
-        /* Additional custom styles that were in Tailwind config */
+        /* Custom styles */
         .animate-gradient {
             animation: gradient 8s linear infinite;
             background-size: 300%;
@@ -31,7 +30,6 @@
             50% { transform: translateY(-20px); }
         }
         
-        /* Base styles */
         * {
             margin: 0;
             padding: 0;
@@ -524,6 +522,10 @@
         const { createApp, ref, onMounted } = Vue;
 
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbzvIPWec8yBxqGOcNUYDcyMNfQ2CZQpp-AF-m_2yIzdxrZ2PEiwy7bg7DtlHKj7mSyB/exec';
+        
+        // เปลี่ยนมาใช้ placeholder images ที่เชื่อถือได้
+        const DEFAULT_AVATAR = 'https://ui-avatars.com/api/?background=7c3aed&color=fff&size=200&rounded=true&bold=true&fontsize=0.6&name=CS';
+        const DEFAULT_PLACEHOLDER = 'https://placehold.co/400x400/7c3aed/white?text=No+Image';
 
         createApp({
             setup() {
@@ -569,7 +571,7 @@
                     connectTitle: ''
                 });
 
-                const defaultLogo = 'https://via.placeholder.com/200x200/7c3aed/ffffff?text=CS';
+                const defaultLogo = DEFAULT_AVATAR;
                 const aboutText = 'Welcome to my creative studio! I specialize in bringing imagination to life through digital art.';
 
                 const formatPrice = (price) => {
@@ -612,8 +614,8 @@
                 };
 
                 const handleImageError = (e) => {
-                    console.log('Image failed to load:', e.target.src);
-                    e.target.src = 'https://via.placeholder.com/400x400/7c3aed/ffffff?text=No+Image';
+                    console.log('Image failed to load, using placeholder');
+                    e.target.src = DEFAULT_PLACEHOLDER;
                     e.target.onerror = null;
                 };
 
