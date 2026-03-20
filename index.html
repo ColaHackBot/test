@@ -11,7 +11,6 @@
     <meta name="theme-color" content="#c084fc">
 
     <!-- Tailwind CSS - CDN (สำหรับ development เท่านั้น) -->
-    <!-- คำเตือน: ควรใช้ Tailwind CLI หรือ PostCSS plugin ใน production -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Tailwind Config Override -->
@@ -56,8 +55,8 @@
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Vue 3 Production Build (ใช้ production build เพื่อลด warning) -->
-    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
     <style>
         * {
@@ -330,21 +329,18 @@
                     </div>
                     <div class="flex flex-wrap justify-center gap-2 mt-4">
                         <span v-for="badge in data.badges" :key="badge"
-                            class="px-3 py-1 rounded-full text-xs font-medium bg-purple-500/20 text-purple-400 border border-purple-500/30">
-                            {{ badge }}
-                        </span>
+                            class="px-3 py-1 rounded-full text-xs font-medium bg-purple-500/20 text-purple-400 border border-purple-500/30">{{
+                            badge }}</span>
                     </div>
                 </div>
 
                 <div class="md:col-span-2 bento-item p-8">
                     <h3 class="text-xl font-semibold mb-4 gradient-text">Quick Actions</h3>
                     <div class="grid grid-cols-2 gap-4">
-                        <a :href="data.queueUrl || '#'" target="_blank" class="btn-primary-custom text-center">
-                            <i class="fas fa-list-check mr-2"></i> Check Queue
-                        </a>
-                        <a :href="data.detailUrl || '#'" target="_blank" class="btn-secondary-custom text-center">
-                            <i class="fas fa-image mr-2"></i> Portfolio Detail
-                        </a>
+                        <a :href="data.queueUrl || '#'" target="_blank" class="btn-primary-custom text-center"><i
+                                class="fas fa-list-check mr-2"></i> Check Queue</a>
+                        <a :href="data.detailUrl || '#'" target="_blank" class="btn-secondary-custom text-center"><i
+                                class="fas fa-image mr-2"></i> Portfolio Detail</a>
                     </div>
                     <div class="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-white/10">
                         <div class="text-center">
@@ -395,9 +391,8 @@
                         <p class="text-sm text-gray-400 mb-3">Style Tags</p>
                         <div class="flex flex-wrap gap-2">
                             <span v-for="tag in data.styleTags" :key="tag"
-                                class="px-3 py-1 rounded-full text-xs bg-purple-500/20 text-purple-400 border border-purple-500/30">
-                                #{{ tag }}
-                            </span>
+                                class="px-3 py-1 rounded-full text-xs bg-purple-500/20 text-purple-400 border border-purple-500/30">#{{
+                                tag }}</span>
                         </div>
                     </div>
                 </div>
@@ -414,9 +409,8 @@
                             <p class="text-xs text-gray-500 mt-1">{{ item.detail }}</p>
                         </div>
                     </div>
-                    <button class="btn-secondary-custom w-full mt-4 text-sm justify-center" @click="scrollToPrices">
-                        View All Packages <i class="fas fa-arrow-right ml-2"></i>
-                    </button>
+                    <button class="btn-secondary-custom w-full mt-4 text-sm justify-center" @click="scrollToPrices">View
+                        All Packages <i class="fas fa-arrow-right ml-2"></i></button>
                 </div>
             </div>
 
@@ -483,9 +477,8 @@
                     <p class="text-sm text-gray-400 mb-3">Payment Methods</p>
                     <div class="flex flex-wrap gap-3">
                         <span v-for="payment in data.payments" :key="payment"
-                            class="px-4 py-2 rounded-full text-sm bg-purple-500/20 text-purple-400 border border-purple-500/30">
-                            <i :class="getPaymentIcon(payment)"></i> {{ payment }}
-                        </span>
+                            class="px-4 py-2 rounded-full text-sm bg-purple-500/20 text-purple-400 border border-purple-500/30"><i
+                                :class="getPaymentIcon(payment)"></i> {{ payment }}</span>
                     </div>
                 </div>
             </div>
@@ -513,9 +506,7 @@
                 </div>
                 <div class="flex flex-wrap gap-3">
                     <a v-for="btn in data.groupBtns" :key="btn.label" :href="btn.url" target="_blank"
-                        class="btn-secondary-custom text-sm">
-                        <i :class="btn.icon"></i> {{ btn.label }}
-                    </a>
+                        class="btn-secondary-custom text-sm"><i :class="btn.icon"></i> {{ btn.label }}</a>
                 </div>
             </div>
 
@@ -554,9 +545,8 @@
                 <div class="max-w-4xl max-h-[90vh] rounded-2xl overflow-hidden" @click.stop>
                     <img :src="modalImage" class="w-full h-full object-contain" alt="Preview">
                     <button
-                        class="absolute top-4 right-4 w-12 h-12 rounded-full bg-black/50 backdrop-blur text-white hover:bg-black/70 transition-all">
-                        <i class="fas fa-times"></i>
-                    </button>
+                        class="absolute top-4 right-4 w-12 h-12 rounded-full bg-black/50 backdrop-blur text-white hover:bg-black/70 transition-all"><i
+                            class="fas fa-times"></i></button>
                 </div>
             </div>
         </transition>
@@ -609,21 +599,12 @@
                 };
 
                 const getSpeedText = (speed) => {
-                    const texts = {
-                        fast: '⚡ Fast (1-2 days)',
-                        mid: '⏳ Medium (3-5 days)',
-                        slow: '🐢 Slow (5-7 days)'
-                    };
+                    const texts = { fast: '⚡ Fast (1-2 days)', mid: '⏳ Medium (3-5 days)', slow: '🐢 Slow (5-7 days)' };
                     return texts[speed] || 'Standard';
                 };
 
                 const getPaymentIcon = (payment) => {
-                    const icons = {
-                        PromptPay: 'fas fa-mobile-alt',
-                        TrueMoney: 'fas fa-wallet',
-                        'Bank Transfer': 'fas fa-university',
-                        PayPal: 'fab fa-paypal'
-                    };
+                    const icons = { PromptPay: 'fas fa-mobile-alt', TrueMoney: 'fas fa-wallet', 'Bank Transfer': 'fas fa-university', PayPal: 'fab fa-paypal' };
                     return icons[payment] || 'fas fa-money-bill';
                 };
 
@@ -736,7 +717,6 @@
                                     }
                                 }
                             });
-
                             localStorage.setItem('bioData', JSON.stringify(data.value));
                         } else if (!saved) {
                             loadDefaultData();
